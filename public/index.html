@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DecentPilgrimages</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+  />
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="./styles/base.css" />
+  <link rel="stylesheet" href="./styles/loader.css" />
+  <link rel="stylesheet" href="./styles/header.css" />
+  <link rel="stylesheet" href="./styles/map.css" />
+  <link rel="stylesheet" href="./styles/info-panel.css" />
+  <link rel="stylesheet" href="./styles/admin-panel.css" />
+  <link rel="stylesheet" href="./styles/animations.css" />
+  <!-- Favicon -->
+  <link rel="icon" href="./assets/MandelBlum.png" type="image/jpeg" />
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader" class="loader">
+    <div class="spinner"></div>
+    <div class="loader-text">Loading...</div>
+  </div>
+
+  <!-- Header -->
+  <header id="app-header">
+    <img src="./assets/SecretPyramid.png" alt="DecentAgency Logo" class="header-logo" />
+    <h1 id="pilgrimage-name">DecentPilgrimages</h1> <!-- Pilgrimage name will load dynamically -->
+    <nav>
+      <button id="request-access-button">Request Access</button>
+      <button id="wallet-connect-button">
+        <img src="./assets/MetaMask_Logo.png" alt="MetaMask" class="wallet-logo" />
+        Connect Wallet
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main Section -->
+  <main>
+    <!-- Map Container -->
+    <section id="map-container">
+      <div id="map"></div>
+    </section>
+
+    <!-- Info Panel -->
+    <section id="info-panel" class="hidden">
+      <video id="info-video" class="background-video" autoplay muted loop>
+        <source src="./assets/blue_sprite.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div id="info-content">
+        <p>Welcome to DecentPilgrimages! Click a marker to explore.</p>
+        <div id="token-logos">
+          <div class="token-container">
+            <a href="https://www.mintme.com/token/DecentSmartHomes" target="_blank">
+              <img src="./assets/DecentSmartHome_Logo.png" alt="Decent Smart Home" />
+            </a>
+            <div class="token-count">0</div>
+          </div>
+          <div class="token-container">
+            <a href="https://www.mintme.com/token/bobdubbloon" target="_blank">
+              <img src="./assets/BobCat_Logo.png" alt="BobCat" />
+            </a>
+            <div class="token-count">0</div>
+          </div>
+          <div class="token-container">
+            <a href="https://www.mintme.com/token/DooBetter" target="_blank">
+              <img src="./assets/DooBetter_Logo.png" alt="DooBetter" />
+            </a>
+            <div class="token-count">0</div>
+          </div>
+        </div>
+        <!-- Timeline for Collection Events -->
+        <div id="collection-timeline"></div>
+      </div>
+    </section>
+
+
+    <!-- Admin Panel -->
+    <section id="admin-panel" class="hidden">
+      <h2>Admin Console</h2>
+      <div id="admin-controls">
+        <!-- Whitelist Participant -->
+        <div class="admin-section">
+          <h3>Whitelist Participant</h3>
+          <label for="whitelist-participant">Wallet Address:</label>
+          <input id="whitelist-participant" type="text" placeholder="Wallet Address" />
+          <button id="whitelist-participant-button">Whitelist</button>
+        </div>
+    
+        <!-- Whitelist Sponsor -->
+        <div class="admin-section">
+          <h3>Whitelist Sponsor</h3>
+          <label for="whitelist-sponsor">Wallet Address:</label>
+          <input id="whitelist-sponsor" type="text" placeholder="Wallet Address" />
+          <button id="whitelist-sponsor-button">Whitelist</button>
+        </div>
+    
+        <!-- Add Sponsor Tokens -->
+        <div class="admin-section">
+          <h3>Add Sponsor Tokens</h3>
+          <label for="sponsor-token-address">Token Address:</label>
+          <input id="sponsor-token-address" type="text" placeholder="Token Address" />
+          <label for="sponsor-token-amount">Amount:</label>
+          <input id="sponsor-token-amount" type="number" placeholder="Amount" />
+          <button id="add-sponsor-tokens-button">Add Tokens</button>
+        </div>
+    
+        <!-- Add Location -->
+        <div class="admin-section">
+          <h3>Add Location</h3>
+          <label for="location-name">Location Name:</label>
+          <input id="location-name" type="text" placeholder="Location Name" />
+          <label for="location-lat">Latitude (decimal):</label>
+          <input id="location-lat" type="text" placeholder="Latitude" />
+          <label for="location-lng">Longitude (decimal):</label>
+          <input id="location-lng" type="text" placeholder="Longitude" />
+          <label for="location-radius">Radius (meters):</label>
+          <input id="location-radius" type="number" placeholder="Radius" />
+          <label for="location-mission">Mission:</label>
+          <input id="location-mission" type="text" placeholder="Mission" />
+          <label for="location-token-address">Token Address:</label>
+          <input id="location-token-address" type="text" placeholder="Token Address" />
+          <label for="location-token-amount">Token Amount:</label>
+          <input id="location-token-amount" type="number" placeholder="Amount" />
+          <button id="add-location-button">Add Location</button>
+        </div>
+    
+        <!-- Remove Location -->
+        <div class="admin-section">
+          <h3>Remove Location</h3>
+          <label for="remove-location-id">Location ID:</label>
+          <input id="remove-location-id" type="number" placeholder="Location ID" />
+          <button id="remove-location-button">Remove Location</button>
+        </div>
+    
+        <!-- Withdraw Tokens -->
+        <div class="admin-section">
+          <h3>Withdraw Tokens</h3>
+          <label for="withdraw-token-address">Token Address:</label>
+          <input id="withdraw-token-address" type="text" placeholder="Token Address" />
+          <label for="withdraw-token-amount">Amount:</label>
+          <input id="withdraw-token-amount" type="number" placeholder="Amount" />
+          <button id="withdraw-tokens-button">Withdraw Tokens</button>
+        </div>
+      </div>
+    </section>
+
+    
+  </main>
+
+  <!-- Footer -->
+  <footer id="app-footer">
+    <p>&copy; 2025 DecentPilgrimages. Powered by <b>DecentAgency</b>.</p>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+  <!-- ethers.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
+  <!-- App Scripts -->
+  <script type="module" src="./scripts/wallet.js"></script>
+  <script type="module" src="./scripts/landmarks.js"></script>
+  <script type="module" src="./scripts/contract.js"></script>
+  <script type="module" src="./scripts/main.js"></script>
+</body>
+</html>

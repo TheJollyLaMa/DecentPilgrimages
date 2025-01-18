@@ -1,0 +1,50 @@
+/* Header */
+#app-header {
+    width: 100%;
+    padding: 1em;
+    background-color: rgba(10, 15, 10, 0.6);
+    border-bottom: 2px solid #5dc1b9; /* Neon blue-green */
+    text-align: center;
+}
+
+#app-header h1 {
+    color: #d7f8c2; /* Soft earthy green */
+    font-size: 1.4rem;
+    margin-bottom: 0.5em;
+}
+
+#app-header nav {
+    margin-top: 0.5em;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.header-logo {
+    width: 80px;
+    margin-bottom: 10px;
+}
+
+#wallet-connect-button {
+    display: flex;
+    align-items: center;
+    background-color: rgba(93, 193, 185, 0.2); /* Transparent blue-green */
+    border: 2px solid #5dc1b9; /* Neon blue-green */
+    padding: 0.6em 1em;
+    color: #d7f8c2; /* Green text */
+    font-family: inherit;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#wallet-connect-button.connected {
+    background-color: rgba(93, 193, 185, 0.4); /* Brighter green on connect */
+    color: #d7f8c2;
+}
+
+.wallet-logo {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}

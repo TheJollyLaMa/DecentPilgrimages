@@ -1,0 +1,67 @@
+/* Admin Panel Styling */
+#admin-panel {
+    margin: 1em auto;
+    background-color: rgba(10, 15, 10, 0.3);
+    border: 2px solid #5dc1b9; /* Neon blue-green */
+    border-radius: 10px;
+    padding: 1.5em;
+    color: #d7f8c2; /* Green text */
+    max-width: 600px;
+    box-shadow: 0 0 15px rgba(93, 193, 185, 0.4); /* Add subtle glow */
+}
+
+/* Admin Panel Section Styling */
+.admin-section {
+    margin-bottom: 2em;
+    padding: 1em;
+    border: 1px solid #5dc1b9; /* Neon blue-green border */
+    border-radius: 8px;
+    background-color: rgba(10, 15, 10, 0.2); /* Subtle green background */
+    box-shadow: 0 0 8px rgba(93, 193, 185, 0.4); /* Add slight glow */
+}
+
+.admin-section h3 {
+    color: #d7f8c2; /* Soft green text */
+    font-size: 1.2rem;
+    margin-bottom: 1em;
+    border-bottom: 1px solid #5dc1b9;
+    padding-bottom: 0.5em;
+}
+
+.admin-action {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1em;
+}
+
+.admin-action input {
+    flex: 1 1 auto;
+    padding: 0.5em;
+    border: 1px solid #5dc1b9;
+    border-radius: 4px;
+    background-color: rgba(93, 193, 185, 0.2);
+    color: #d7f8c2;
+    max-width: 300px;
+}
+
+.admin-action label {
+    flex: 1 0 150px;
+    color: #d7f8c2;
+}
+
+.admin-action button {
+    padding: 0.6em 1em;
+    background-color: rgba(226, 213, 128, 0.2); /* Yellow background */
+    border: 2px solid #5dc1b9;
+    color: #d7f8c2;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.admin-action button:hover {
+    background-color: rgba(226, 213, 128, 0.4); /* Brighter yellow */
+    transform: scale(1.05);
+}

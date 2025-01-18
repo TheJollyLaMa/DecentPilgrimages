@@ -1,0 +1,432 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    background-color: #0a0f0a; /* Deep forest green */
+    font-family: 'Comic Sans MS', sans-serif;
+    overflow-x: hidden; /* Avoid horizontal scroll on mobile */
+  }
+  
+  /* Loader */
+  .loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 15, 10, 0.8); /* Semi-transparent green */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .loader.hidden {
+    display: none !important;
+  }
+  .hidden {
+    display: none !important;
+  }
+  .loader-text {
+    color: #e2d580; /* Soft yellow for loader text */
+    margin-top: 10px;
+    font-size: 1.2em;
+  }
+  
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(226, 213, 128, 0.4); /* Yellow semi-transparent */
+    border-top: 6px solid #5dc1b9; /* Neon blue-green */
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Header */
+  #app-header {
+    width: 100%;
+    padding: 1em;
+    background-color: rgba(10, 15, 10, 0.6);
+    border-bottom: 2px solid #5dc1b9; /* Neon blue-green */
+    text-align: center;
+  }
+  
+  #app-header h1 {
+    color: #d7f8c2; /* Soft earthy green */
+    font-size: 1.4rem;
+    margin-bottom: 0.5em;
+  }
+  
+  #app-header nav {
+    margin-top: 0.5em;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .header-logo {
+    width: 80px;
+    margin-bottom: 10px;
+  }
+  
+  /* Request Access Button */
+  #request-access-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(93, 193, 185, 0.2); /* Transparent blue-green */
+    border: 2px solid #5dc1b9; /* Neon blue-green */
+    padding: 0.6em 1em;
+    color: #d7f8c2; /* Green text */
+    font-family: inherit;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 1000; /* Ensure it appears above other elements */
+    font-size: 0.9rem;
+  }
+  
+  #request-access-button:hover {
+    background-color: rgba(93, 193, 185, 0.4); /* Slightly brighter on hover */
+  }
+
+  /* Wallet Connect Button */
+  #wallet-connect-button {
+    display: flex;
+    align-items: center;
+    background-color: rgba(93, 193, 185, 0.2); /* Transparent blue-green */
+    border: 2px solid #5dc1b9; /* Neon blue-green */
+    padding: 0.6em 1em;
+    color: #d7f8c2; /* Green text */
+    font-family: inherit;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #wallet-connect-button.connected {
+    background-color: rgba(93, 193, 185, 0.4); /* Brighter green on connect */
+    color: #d7f8c2;
+  }
+  
+  .wallet-logo {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  
+  /* Main Content */
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* Map Container */
+  #map-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 1em auto;
+    position: relative;
+  }
+  
+  #map {
+    width: 100%;
+    height: 60vh;
+    border: 2px solid #5dc1b9; /* Neon blue-green */
+    box-shadow: 0 0 15px rgba(93, 193, 185, 0.4); /* Subtle green glow */
+    border-radius: 8px;
+  }
+  
+  /* Info Panel */
+  #info-panel {
+    width: 100%;
+    max-width: 1000px;
+    margin: 1em auto;
+    background-color: rgba(10, 15, 10, 0.3);
+    border: 2px solid #d7f8c2; /* Soft earthy green */
+    border-radius: 10px;
+    padding: 1em;
+    color: #d7f8c2; /* Green text */
+    position: relative; /* For proper layering */
+    overflow: hidden;
+  }
+
+  #info-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; /* Ensure it stays behind the content */
+    opacity: 0.7; /* Add slight transparency for better readability */
+  }
+  
+  #info-content {
+    position: relative;
+    z-index: 1; /* Ensure content is above the video */
+  }
+
+
+  #claim-token-button {
+    margin-top: 1em;
+    padding: 0.8em 1.2em;
+    background-color: rgba(226, 213, 128, 0.2); /* Yellow background */
+    border: 2px solid #5dc1b9; /* Blue-green border */
+    color: #d7f8c2; /* Green text */
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  /* Footer */
+  #app-footer {
+    width: 100%;
+    text-align: center;
+    padding: 1em 0;
+    background-color: rgba(10, 15, 10, 0.6);
+    border-top: 2px solid #5dc1b9;
+  }
+  
+  #app-footer p {
+    color: #e2d580; /* Soft yellow */
+    font-size: 0.9rem;
+  }
+  
+  #app-footer b {
+    color: #5dc1b9; /* Neon blue-green */
+  }
+  
+  /* Responsive (Mobile First) */
+  @media only screen and (max-width: 768px) {
+    #app-header h1 {
+      font-size: 1.2rem;
+    }
+    #menu-button {
+      font-size: 0.9rem;
+    }
+    #map {
+      height: 50vh; /* Make map smaller on mobile */
+    }
+    #info-panel {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media only screen and (max-width: 480px) {
+    #map {
+      height: 45vh;
+    }
+  }
+/* Token Logos Container */
+#token-logos {
+    display: flex; /* Align tokens in a row */
+    flex-wrap: wrap; /* Allow tokens to wrap if they don't fit in one row */
+    justify-content: center; /* Center tokens within the container */
+    gap: 20px; /* Add space between tokens */
+    padding: 10px;
+  }
+  
+  /* Token Container - Round Coins with Glow */
+  .token-container {
+    margin: 20px;
+    display: flex;
+    flex-direction: column; /* Stack image and count vertically */
+    align-items: center; /* Center align content within each container */
+  }
+  
+  .token-container img {
+    width: 100px; /* Size of the token */
+    height: 100px;
+    border-radius: 50%; /* Make them round */
+    border: 3px solid #ffd700; /* Gold border */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), /* Gold glow */
+                0 0 25px rgba(0, 255, 255, 0.4); /* Teal glow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .token-container img:hover {
+    transform: scale(1.1); /* Slight zoom on hover */
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), /* Stronger gold glow */
+                0 0 35px rgba(0, 255, 255, 0.6); /* Stronger teal glow */
+  }
+  
+  /* Token Numbers - Glowing Effect */
+  .token-count {
+    font-size: 2.5rem; /* Slightly larger */
+    color: #ffd700; /* Gold text */
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), /* Gold glow */
+                 0 0 20px rgba(0, 255, 255, 0.6); /* Teal glow */
+    margin-top: 10px;
+    font-weight: bold;
+    transition: text-shadow 0.3s ease;
+  }
+  
+/* Keyframes for spin animation */
+@keyframes spin {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
+  }
+  
+  /* Add spin effect on hover */
+  .token-container img:hover {
+    animation: spin 1s linear infinite; /* Spins continuously when hovered */
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), /* Stronger gold glow */
+                0 0 35px rgba(0, 255, 255, 0.6); /* Stronger teal glow */
+  }
+
+
+
+
+  /* Timeline for Collection Events */
+#collection-timeline {
+    margin-top: 20px;
+    border-top: 1px solid #d7f8c2;
+    padding-top: 10px;
+    max-height: 200px; /* Limit height with scroll */
+    overflow-y: auto; /* Add scrollbar for overflow */
+  }
+  
+  .collection-event {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    color: #ffd700; /* Gold text */
+    font-size: 0.9rem;
+  }
+  
+  .collection-event b {
+    color: #5dc1b9; /* Blue-green */
+  }
+  
+  .collection-event span {
+    font-size: 0.8rem;
+    color: #d7f8c2; /* Earthy green */
+  }
+  
+  /* Popup Modal */
+  #collection-modal {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    background-color: rgba(10, 15, 10, 0.9);
+    color: #ffd700; /* Gold text */
+    border: 2px solid #5dc1b9; /* Neon blue-green */
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1000;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(93, 193, 185, 0.6); /* Glow */
+  }
+  
+  #collection-modal.hidden {
+    display: none;
+  }
+
+
+  /* Admin Panel Styling */
+#admin-panel {
+    margin: 1em auto;
+    background-color: rgba(10, 15, 10, 0.3);
+    border: 2px solid #5dc1b9; /* Neon blue-green */
+    border-radius: 10px;
+    padding: 1.5em;
+    color: #d7f8c2; /* Green text */
+    max-width: 600px;
+    box-shadow: 0 0 15px rgba(93, 193, 185, 0.4); /* Add subtle glow */
+  }
+  
+  /* Admin Panel Section Styling */
+.admin-section {
+    margin-bottom: 2em; /* Add space between sections */
+    padding: 1em;
+    border: 1px solid #5dc1b9; /* Neon blue-green border */
+    border-radius: 8px;
+    background-color: rgba(10, 15, 10, 0.2); /* Subtle green background */
+    box-shadow: 0 0 8px rgba(93, 193, 185, 0.4); /* Add slight glow */
+  }
+  
+  /* Admin Section Headings */
+  .admin-section h3 {
+    color: #d7f8c2; /* Soft green text */
+    font-size: 1.2rem;
+    margin-bottom: 1em; /* Space below heading */
+    text-align: left;
+    border-bottom: 1px solid #5dc1b9; /* Underline for section headings */
+    padding-bottom: 0.5em;
+  }
+  
+  /* Admin Panel Input and Buttons */
+  .admin-action {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px; /* Space between elements */
+    margin-bottom: 1em; /* Space between rows */
+  }
+  
+  .admin-action input {
+    flex: 1 1 auto;
+    padding: 0.5em;
+    border: 1px solid #5dc1b9;
+    border-radius: 4px;
+    background-color: rgba(93, 193, 185, 0.2);
+    color: #d7f8c2;
+    max-width: 300px;
+  }
+  
+  .admin-action label {
+    flex: 1 0 150px; /* Align labels */
+    color: #d7f8c2;
+  }
+  
+  .admin-action button {
+    padding: 0.6em 1em;
+    background-color: rgba(226, 213, 128, 0.2); /* Yellow background */
+    border: 2px solid #5dc1b9;
+    color: #d7f8c2;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .admin-action button:hover {
+    background-color: rgba(226, 213, 128, 0.4); /* Brighter yellow */
+    transform: scale(1.05); /* Slight zoom effect */
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .admin-action {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .admin-action label {
+      flex: none;
+      margin-bottom: 0.5em;
+    }
+  
+    .admin-action input,
+    .admin-action button {
+      width: 100%; /* Full-width inputs and buttons */
+    }
+  }
