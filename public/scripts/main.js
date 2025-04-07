@@ -253,6 +253,29 @@ function initMap() {
     // Add dynamically fetched landmarks
     addLandmarkMarkers(map);
 
+    // Initialize user geolocation tracking using Leaflet's locate method
+    let userMarker;
+    map.locate({ setView: true, watch: true, maxZoom: 16 });
+
+    map.on("locationfound", (e) => {
+      console.log("Location found event:", e);
+      const { lat, lng } = e.latlng;
+      if (!userMarker) {
+        userMarker = L.marker([lat, lng]).addTo(map);
+      } else {
+        userMarker.setLatLng([lat, lng]);
+      }
+      // Update the lat/long display in the header
+      const display = document.getElementById("latlong-display");
+      if (display) {
+        display.textContent = `Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`;
+      }
+    });
+
+    map.on("locationerror", (e) => {
+      console.error("Error getting location", e.message);
+    });
+
     console.log("Map initialized successfully!");
   } catch (error) {
     console.error("Error initializing map:", error);
@@ -299,8 +322,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             toggleInfoPanel(false);
         
         }
-    }
-});
+      }
+  });
 
   requestAccessButton.addEventListener("click", () => {
     if (!connectedWalletAddress) {
