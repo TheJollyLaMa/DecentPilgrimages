@@ -2,10 +2,14 @@ let registryABI, pilgrimageABI;
 
 const CONTRACT_ADDRESSES = {
     registry: "0x4a50bbf238279E7F816Ef0Eaf523ae27962EC5E2",
-    pilgrimage: "0x396e0e11E26A3aCfF7BAcBe9d5943b6b4fdD181d",
+    pilgrimage: "0x8FD1A345F65D27a3c360933e38CC653E0dE37CC1" //  1st try Doobetter Does the East Coast - "0x396e0e11E26A3aCfF7BAcBe9d5943b6b4fdD181d",
 };
 
 let registryContract, pilgrimageContract;
+const ERC20_ABI = [
+    "function approve(address spender, uint256 amount) public returns (bool)",
+    "function allowance(address owner, address spender) public view returns (uint256)"
+];
 
 async function loadABIs() {
     try {
@@ -13,7 +17,7 @@ async function loadABIs() {
         if (!registryResponse.ok) throw new Error("Failed to load DecentPilgrimagesRegistry ABI");
         registryABI = await registryResponse.json();
 
-        const pilgrimageResponse = await fetch("./abis/DecentPilgrimage.json");
+        const pilgrimageResponse = await fetch("./abis/DecentPilgrimage_v0.2.json");
         if (!pilgrimageResponse.ok) throw new Error("Failed to load DecentPilgrimage ABI");
         pilgrimageABI = await pilgrimageResponse.json();
 
@@ -74,7 +78,7 @@ export async function connectContracts() {
 // Fetch the pilgrimage name
 export async function fetchPilgrimageName() {
     try {
-        const name = await pilgrimageContract.pilgrimageName();
+        const name = await window.pilgrimageContract.pilgrimageName();
         console.log("Pilgrimage Name:", name);
         return name;
     } catch (error) {
@@ -86,7 +90,7 @@ export async function fetchPilgrimageName() {
 // Add a location to the pilgrimage
 export async function addLocation(name, lat, lng, radius, tokens, mission) {
     try {
-        const tx = await pilgrimageContract.addLocation(name, lat, lng, radius, tokens, mission);
+        const tx = await window.pilgrimageContract.addLocation(name, lat, lng, radius, tokens, mission);
         await tx.wait();
         console.log("Location added successfully:", tx);
     } catch (error) {
@@ -97,7 +101,7 @@ export async function addLocation(name, lat, lng, radius, tokens, mission) {
 // Claim tokens at a location
 export async function claimTokens(locationId) {
     try {
-        const tx = await pilgrimageContract.claimTokens(locationId);
+        const tx = await window.pilgrimageContract.claimTokens(locationId);
         await tx.wait();
         console.log(`Tokens claimed at location ${locationId}:`, tx);
     } catch (error) {
@@ -108,11 +112,11 @@ export async function claimTokens(locationId) {
 // Fetch all locations
 export async function fetchLocations() {
     try {
-        const locationCount = await pilgrimageContract.locationCount();
+        const locationCount = await window.pilgrimageContract.locationCount();
         const locations = [];
 
         for (let i = 0; i < locationCount; i++) {
-            const location = await pilgrimageContract.locations(i);
+            const location = await window.pilgrimageContract.locations(i);
 
             // Decode location tokens
             const tokens = [];
@@ -126,7 +130,7 @@ export async function fetchLocations() {
             locations.push({
                 id: i,
                 name: location.name,
-                lat: parseFloat(location.lat) / 1e6, // Convert microdegrees to degrees
+                lat: parseFloat(location.lat) / 1e6,
                 lng: parseFloat(location.lng) / 1e6,
                 radius: location.radius,
                 tokens,
@@ -146,7 +150,21 @@ export async function fetchLocations() {
 // Add sponsor tokens
 export async function addSponsorTokens(tokenAddress, amount) {
     try {
-        const tx = await pilgrimageContract.addSponsorTokens(tokenAddress, amount);
+        // Convert the human-friendly amount to the correct 18-decimal BigNumber
+        const parsedAmount = ethers.utils.parseUnits(amount.toString(), 18);
+
+        // Create a new instance of the ERC20 token contract using the minimal ABI
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const tokenContract = new ethers.Contract(tokenAddress, ERC20_ABI, signer);
+
+        // Approve the pilgrimage contract to spend the specified amount of tokens
+        const approveTx = await tokenContract.approve(window.pilgrimageContract.address, parsedAmount);
+        await approveTx.wait();
+        console.log(`Approved ${parsedAmount.toString()} tokens for contract ${window.pilgrimageContract.address} on token ${tokenAddress}`);
+
+        // Now add the sponsor tokens to the pilgrimage
+        const tx = await window.pilgrimageContract.addSponsorTokens(tokenAddress, parsedAmount);
         await tx.wait();
         console.log("Sponsor tokens added:", tx);
     } catch (error) {
@@ -157,7 +175,7 @@ export async function addSponsorTokens(tokenAddress, amount) {
 // Withdraw unused tokens
 export async function withdrawTokens(tokenAddress, amount) {
     try {
-        const tx = await pilgrimageContract.withdrawUnusedTokens(tokenAddress, amount);
+        const tx = await window.pilgrimageContract.withdrawUnusedTokens(tokenAddress, amount);
         await tx.wait();
         console.log("Tokens withdrawn:", tx);
     } catch (error) {
@@ -168,7 +186,7 @@ export async function withdrawTokens(tokenAddress, amount) {
 // Lock tokens into the pilgrimage
 export async function lockTokens(tokenAddress, amount) {
     try {
-        const tx = await pilgrimageContract.lockTokens(tokenAddress, amount);
+        const tx = await window.pilgrimageContract.lockTokens(tokenAddress, amount);
         await tx.wait();
         console.log("Tokens locked:", tx);
     } catch (error) {
@@ -179,7 +197,7 @@ export async function lockTokens(tokenAddress, amount) {
 // Whitelist a participant
 export async function whitelistParticipant(address) {
     try {
-        const tx = await pilgrimageContract.whitelistAddress(address);
+        const tx = await window.pilgrimageContract.whitelistAddress(address);
         await tx.wait();
         console.log("Participant whitelisted:", tx);
     } catch (error) {
@@ -190,7 +208,7 @@ export async function whitelistParticipant(address) {
 // Remove a participant from the whitelist
 export async function removeParticipantFromWhitelist(address) {
     try {
-        const tx = await pilgrimageContract.removeWhitelisted(address);
+        const tx = await window.pilgrimageContract.removeWhitelisted(address);
         await tx.wait();
         console.log("Participant removed from whitelist:", tx);
     } catch (error) {
@@ -201,7 +219,7 @@ export async function removeParticipantFromWhitelist(address) {
 // Whitelist a sponsor
 export async function whitelistSponsor(address) {
     try {
-        const tx = await pilgrimageContract.whitelistSponsor(address);
+        const tx = await window.pilgrimageContract.whitelistSponsor(address);
         await tx.wait();
         console.log("Sponsor whitelisted:", tx);
     } catch (error) {
@@ -212,7 +230,7 @@ export async function whitelistSponsor(address) {
 // Remove a sponsor from the whitelist
 export async function removeSponsorFromWhitelist(address) {
     try {
-        const tx = await pilgrimageContract.removeSponsor(address);
+        const tx = await window.pilgrimageContract.removeSponsor(address);
         await tx.wait();
         console.log("Sponsor removed from whitelist:", tx);
     } catch (error) {
@@ -220,36 +238,37 @@ export async function removeSponsorFromWhitelist(address) {
     }
 }
 
-// Fetch sponsors and their token balances
+// Fetch sponsors and their token balances using the new getWhitelistedSponsors function
 export async function fetchSponsors() {
+    console.log("Pilgrimage Contract: ", window.pilgrimageContract);
     try {
-        const sponsorWhitelist = await pilgrimageContract.sponsorWhitelist();
-        const sponsors = [];
-
-        for (const sponsor of Object.keys(sponsorWhitelist)) {
-            if (sponsorWhitelist[sponsor]) {
-                const balance = await pilgrimageContract.sponsorBalances(sponsor);
-                sponsors.push({
-                    sponsorAddress: sponsor,
-                    balance: balance.toString(),
-                });
-            }
+        const sponsors = await window.pilgrimageContract.getWhitelistedSponsors();
+        const sponsorList = [];
+        for (const sponsor of sponsors) {
+            const balance = await window.pilgrimageContract.sponsorBalances(sponsor);
+            sponsorList.push({
+                sponsorAddress: sponsor,
+                balance: balance.toString(),
+            });
         }
-
-        console.log("Sponsors and balances fetched:", sponsors);
-        return sponsors;
+        console.log("Sponsors and balances fetched:", sponsorList);
+        return sponsorList;
     } catch (error) {
         console.error("Error fetching sponsors and balances:", error);
         return [];
     }
 }
 
-// Fetch tokens collected by a specific wallet
+// Fetch tokens collected by a specific wallet using the new getCollectedTokens function
 export async function fetchCollectedTokens(walletAddress) {
     try {
-        const collectedTokens = await pilgrimageContract.getCollectedTokens(walletAddress);
-        console.log(`Tokens collected by ${walletAddress}:`, collectedTokens);
-        return collectedTokens;
+        const tokens = await window.pilgrimageContract.getCollectedTokens(walletAddress);
+        const tokenList = tokens.map(token => ({
+            tokenAddress: token.tokenAddress,
+            amount: token.amount.toString(),
+        }));
+        console.log(`Tokens collected by ${walletAddress}:`, tokenList);
+        return tokenList;
     } catch (error) {
         console.error("Error fetching collected tokens:", error);
         return [];
