@@ -1,0 +1,18 @@
+name: Validate Base V1 and payroll
+on:
+  pull_request:
+    paths: ['contracts/**', 'scripts/**', 'assistant/**', 'public/**', 'payroll/**', 'test/**', 'package*.json', 'hardhat.config.js', '.github/workflows/**']
+  push:
+    paths: ['contracts/**', 'scripts/**', 'assistant/**', 'public/**', 'payroll/**', 'test/**', 'package*.json', 'hardhat.config.js', '.github/workflows/**']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm ci --ignore-scripts
+      - run: node payroll/scripts/validatePayrollQueue.js
+      - run: npm test
