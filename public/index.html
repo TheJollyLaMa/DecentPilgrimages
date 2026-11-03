@@ -7,6 +7,8 @@
   <meta name="color-scheme" content="dark">
   <title>DecentPilgrimages · A trail worth taking</title>
   <link rel="stylesheet" href="./styles/trail.css">
+  <link rel="stylesheet" href="./vendor/leaflet/1.9.4/leaflet.css">
+  <script src="./vendor/leaflet/1.9.4/leaflet.js"></script>
   <script type="module" src="./scripts/v1/app.mjs"></script>
 </head>
 <body>
@@ -14,10 +16,10 @@
   <decent-header></decent-header>
   <main id="trail">
     <section class="hero" aria-labelledby="welcome">
-      <div class="eyebrow">BASE V1 · PEOPLE BEFORE PROOF</div>
+      <div class="eyebrow">SPONSOR A JOURNEY · LEAVE SOMETHING GOOD</div>
       <h1 id="welcome">A trail worth<br><em>taking together.</em></h1>
-      <p>Find a place. Follow its mission. Share your work privately with an organizer.
-        The journey is free; a wallet is only needed for on-chain actions.</p>
+      <p>Pin a little encouragement at the end of a walk. Sponsor a museum visit.
+        Leave a token basket at a place worth reaching. Give someone a good reason to go.</p>
       <div class="actions"><button id="start-tour" class="primary">Follow the bunny <span aria-hidden="true">↗</span></button>
         <button id="open-help">How this works</button></div>
       <div class="trail-facts"><span>◎ No location tracking</span><span>☥ Organizer-reviewed rewards</span><span>◇ Your data, your choice</span></div>
@@ -30,18 +32,12 @@
     </section>
     <section class="trail-layout" aria-label="Trail explorer">
       <div class="map-panel panel">
-        <div class="section-heading"><div><span class="eyebrow">CHOOSE YOUR NEXT STEP</span><h2>Trail atlas</h2></div><span class="tag" id="map-mode">Demonstration map</span></div>
-        <p class="muted">A local, illustrative atlas — not navigation advice. Select a marker or use the trail list. No map provider receives your data.</p>
-        <div class="map" id="map" aria-label="Illustrative world trail map">
-          <svg viewBox="0 0 800 400" role="img" aria-label="Illustrative continents and connecting trails">
-            <defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M 50 0 L 0 0 0 50" fill="none" stroke="currentColor" stroke-width=".5"/></pattern></defs>
-            <rect width="800" height="400" fill="url(#grid)" opacity=".25"/>
-            <path class="continent" d="M55 70 100 45 190 58 228 95 200 134 170 160 155 203 132 180 117 138 74 130ZM185 222 230 209 260 241 245 313 223 366 201 325 192 270ZM353 71 397 52 430 83 482 62 600 78 674 132 625 185 560 170 518 217 485 184 443 128 400 135 362 116ZM365 156 418 151 450 195 437 268 402 307 377 254 352 191ZM610 284 662 265 719 293 701 334 645 334Z"/>
-            <path class="route" d="M165 125 Q310 7 414 119 T560 170"/>
-          </svg>
-          <div id="markers"></div>
-        </div>
-        <div class="geo-box" id="geo-area"><div><h3>Find your bearings, privately</h3><p>Optional high-accuracy location is advisory only. It stays in this page’s memory and never approves a reward.</p></div>
+        <div class="section-heading"><div><span class="eyebrow">CHOOSE YOUR NEXT STEP</span><h2>Pilgrimage map</h2></div><span class="tag" id="map-mode">Demo stops · real coordinates</span></div>
+        <p class="muted">Pan, zoom and select a pin. Circles show geographic gates in meters. Click the map to position a local draft, or type exact coordinates below.</p>
+        <label class="check"><input id="map-tiles" type="checkbox"> Show OpenStreetMap streets (external tiles; shares your IP and viewed area)</label>
+        <div class="map" id="map" role="region" aria-label="Geographic pilgrimage map"></div>
+        <p id="map-status" role="status">Street basemap off. Pins and gate circles work locally. No map provider contacted until you choose.</p>
+        <div class="geo-box" id="geo-area"><div><h3>Find your bearings, privately</h3><p>Optional location stays in this page. A fresh, accurate fix can open a visit check; it never transfers tokens by itself.</p></div>
           <button id="request-location">Use my location once</button><button id="clear-location" hidden>Clear location</button></div>
         <p id="geo-status" role="status">Location not requested.</p>
       </div>
@@ -54,6 +50,28 @@
         <label id="claim-token-label" hidden>Reward token<select id="claim-token"></select></label>
         <button id="check-claim" disabled>Check organizer approval</button>
       </aside>
+    </section>
+    <section class="panel pinning-panel" aria-labelledby="pin-title">
+      <span class="eyebrow">NEXT-LEVEL GATES · LOCAL DESIGN STUDIO</span><h2 id="pin-title">Give someone a reason to go.</h2>
+      <p>A short walk. A museum exhibit. A community garden. Design a funded stop for one traveler or a small group. These drafts are <strong>unfunded and unminted</strong>; no live V2 contract or visit service is connected.</p>
+      <form id="pin-form"><fieldset>
+        <legend>Place a token gate</legend>
+        <div class="input-row"><label>Stop name<input name="name" required maxlength="100" placeholder="A walk to the community garden"></label><label>Purpose<textarea name="description" required maxlength="1000" rows="2" placeholder="A little encouragement to get outside and notice something growing."></textarea></label></div>
+        <div class="input-row"><label>Latitude<input name="latitude" required placeholder="43.000000"></label><label>Longitude<input name="longitude" required placeholder="-76.000000"></label><label>Gate radius, meters<input name="radius" type="number" min="5" max="10000" value="30" required></label></div>
+        <button id="pin-at-location" type="button">Position at my fresh GPS fix</button>
+        <div class="input-row"><label>Collection mode<select name="mode"><option value="per-participant">One fixed basket per participant</option><option value="first-collector">First eligible visitor takes the basket</option></select></label><label>Visit check<select name="verification"><option value="video">Video check-in with verifier</option><option value="knowledge">Private local-knowledge test</option></select></label></div>
+        <label>What should the visitor observe or discuss? (public, no private answers)<input name="prompt" required maxlength="500" placeholder="Tell the host one thing you noticed in the new exhibit."></label>
+        <div class="input-row"><label>Whitelisted participant wallets (commas or spaces)<textarea name="participants" required maxlength="4300" rows="2" placeholder="0x..."></textarea></label><label>Visit verifier wallet<input name="verifier" required pattern="0x[a-fA-F0-9]{40}" maxlength="42"></label></div>
+        <div class="input-row"><label>Asset contract (zero address = native ETH)<input name="token" required value="0x0000000000000000000000000000000000000000" pattern="0x[a-fA-F0-9]{40}" maxlength="42"></label><label>Label<input name="symbol" value="ETH" required maxlength="12"></label><label>Decimals<input name="decimals" type="number" min="0" max="36" value="18" required></label><label>Amount per basket<input name="amount" required inputmode="decimal" placeholder="0.001"></label></div>
+        <label>Collection deadline (your local time)<input name="expiresAt" required type="datetime-local"></label>
+        <label class="check"><input name="consent" type="checkbox" required> I have permission for this stop. I understand published gate coordinates and wallet allowlists are public. No private driveway, private home details, meeting links or test answers belong in metadata.</label>
+        <div class="actions"><button type="submit" class="primary">Review gate & required funding</button><button id="export-gate" type="button" disabled>Export exact metadata draft</button><label class="file-button">Recover gate draft<input id="import-gate" type="file" accept=".json,application/json"></label></div>
+      </fieldset></form>
+      <p id="pin-status" role="status">Choose coordinates on the map or enter them. Nothing is saved automatically.</p><pre id="gate-review" aria-label="Reviewed gate metadata and funding"></pre>
+      <h3>Arrive → verify the visit → collect</h3>
+      <p id="arrival-state" role="status">Review a draft and request a fresh GPS fix to rehearse the gate. Location stays in this page.</p>
+      <div class="actions"><button id="visit-video" disabled>Request video check-in</button><button id="visit-knowledge" disabled>Request local-knowledge test</button></div>
+      <p id="visit-result" role="status"></p>
     </section>
     <section class="panel" aria-labelledby="trails-title"><div class="section-heading"><h2 id="trails-title">Places with purpose</h2><span class="muted">Keyboard-friendly trail list</span></div><div class="trail-cards" id="trail-list"></div></section>
     <section class="next-steps">

@@ -3,11 +3,13 @@ const path = require("node:path");
 const hre = require("hardhat");
 
 async function main() {
-    const artifact = await hre.artifacts.readArtifact("DecentPilgrimageBaseV1");
-    const output = path.join(__dirname, "..", "contracts", "abi", "DecentPilgrimageBaseV1.json");
-    fs.mkdirSync(path.dirname(output), { recursive: true });
-    fs.writeFileSync(output, `${JSON.stringify(artifact.abi, null, 2)}\n`);
-    console.log(`Exported ${artifact.abi.length} ABI entries to contracts/abi/DecentPilgrimageBaseV1.json`);
+    for (const name of ["DecentPilgrimageBaseV1", "DecentPilgrimageGateV2"]) {
+        const artifact = await hre.artifacts.readArtifact(name);
+        const output = path.join(__dirname, "..", "contracts", "abi", `${name}.json`);
+        fs.mkdirSync(path.dirname(output), { recursive: true });
+        fs.writeFileSync(output, `${JSON.stringify(artifact.abi, null, 2)}\n`);
+        console.log(`Exported ${artifact.abi.length} ABI entries to contracts/abi/${name}.json`);
+    }
 }
 
 main().catch((error) => {

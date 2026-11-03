@@ -30,9 +30,15 @@ if (selectedNetwork === "baseSepolia" && process.env.BASE_SEPOLIA_RPC_URL) {
 
 module.exports = {
     solidity: {
-        version: "0.8.24",
-        settings: {
-            optimizer: { enabled: true, runs: 200 }
+        compilers: [
+            { version: "0.8.24", settings: { optimizer: { enabled: true, runs: 200 } } },
+            { version: "0.8.26", settings: { optimizer: { enabled: true, runs: 200 }, evmVersion: "cancun" } }
+        ],
+        overrides: {
+            "contracts/DecentPilgrimageGateV2.sol": {
+                version: "0.8.26",
+                settings: { optimizer: { enabled: true, runs: 200 }, evmVersion: "cancun" }
+            }
         }
     },
     networks,

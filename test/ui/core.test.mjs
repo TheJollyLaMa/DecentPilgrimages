@@ -55,7 +55,7 @@ test('geolocation opt-in is high accuracy, denial does not disable participation
   await assert.rejects(requestAdvisoryLocation(geolocation), /denied.*Participation/);
   assert.equal(requests, 1); assert.equal(fixtures.length, 3);
   await assert.rejects(requestAdvisoryLocation(null), /unavailable/);
-  const position = await requestAdvisoryLocation({ getCurrentPosition(success) { success({ coords: { latitude: 0, longitude: 0, accuracy: 10 } }); } });
+  const position = await requestAdvisoryLocation({ getCurrentPosition(success) { success({ timestamp: Date.now(), coords: { latitude: 0, longitude: 0, accuracy: 10 } }); } });
   assert.equal(advisoryDistanceMeters(position, { latitude: '0', longitude: '0' }), 0);
   assert.ok(advisoryDistanceMeters(position, { latitude: '0', longitude: '1' }) > 111000);
 });
@@ -70,7 +70,8 @@ test('supported entrypoint never loads legacy fake-whitelist sources; tutorial t
   const html = readFileSync(new URL('../../public/index.html', import.meta.url), 'utf8');
   const app = readFileSync(new URL('../../public/scripts/v1/app.mjs', import.meta.url), 'utf8');
   const css = readFileSync(new URL('../../public/styles/trail.css', import.meta.url), 'utf8');
-  assert.doesNotMatch(html, /scripts\/(main|wallet|contract|landmarks)\.js|whitelist\.json|unpkg|leaflet/i);
+  assert.doesNotMatch(html, /scripts\/(main|wallet|contract|landmarks)\.js|whitelist\.json|unpkg/i);
+  assert.match(html, /vendor\/leaflet\/1\.9\.4\/leaflet\.js/);
   assert.match(html, /scripts\/v1\/app\.mjs/);
   assert.match(css, /prefers-reduced-motion:reduce/);
   assert.match(app, /if \(!reducedMotion\(\)\)/);

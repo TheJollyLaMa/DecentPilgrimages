@@ -2,6 +2,8 @@ import { deployment as configuredDeployment, assistant, radio } from './config.m
 import { fixtures, tutorial, deploymentProblem, writeProblem, isNativeToken, formatTokenAmount, coordinateToMicrodegrees, emptyJournal, validateJournal, requestAdvisoryLocation, advisoryDistanceMeters, assistantRequest } from './core.mjs';
 import { createPilgrimageClient } from './client.mjs';
 import { createRadioController } from './radio.mjs';
+import { createGeographicMap } from './map.mjs';
+import { createPinning } from './pinning.mjs';
 
 const $ = id => document.getElementById(id);
 const deployment = { ...configuredDeployment, tokens: configuredDeployment.tokens.map(token => ({ ...token })) };
@@ -9,6 +11,16 @@ const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)'
 let journal = emptyJournal(), localStorageAvailable = true, places = [...fixtures], selected = places[0], location = null;
 let tourIndex = 0, tourTarget = null, tourReturn = null, busy = false, claimApproval = null, assistantBusy = false;
 let geoRequest = 0;
+let geographicMap = null, pinning = null;
+try {
+  geographicMap = createGeographicMap($('map'), { onSelect: place => { selectPlace(place); geographicMap.focus(place); }, onPin: point => pinning.pick(point) });
+  pinning = createPinning({ map: geographicMap, getPosition: () => location });
+} catch (error) { $('map-status').textContent = error.message; $('pin-form').querySelector('fieldset').disabled = true; }
+$('map-tiles').addEventListener('change', event => {
+  if (!geographicMap) { $('map-status').textContent = 'Local map is unavailable. Reload to retry.'; return; }
+  geographicMap.setTiles(event.target.checked, () => { $('map-status').textContent = 'Some map tiles are unavailable. Pins and gate circles remain usable; retry by toggling the basemap.'; });
+  $('map-status').textContent = event.target.checked ? 'OpenStreetMap enabled. Its tile server receives your IP and viewed map area. No route or GPS coordinates are explicitly uploaded.' : 'Basemap off. Geographic pins and gate circles remain local; no new tile requests.';
+});
 try { const stored = localStorage.getItem('decentpilgrimages:journal:v1'); if (stored) journal = validateJournal(JSON.parse(stored)); }
 catch { localStorageAvailable = false; }
 
@@ -76,21 +88,16 @@ function updateGates() {
   $('claim-reward').disabled = busy || Boolean(problem) || selected.demo || !claimApproval?.eligible;
 }
 function renderPlaces() {
-  $('trail-list').replaceChildren(); $('markers').replaceChildren();
+  $('trail-list').replaceChildren();
   for (const place of places) {
     const card = document.createElement('button');
     card.className = 'trail-card'; card.type = 'button'; card.setAttribute('aria-pressed', String(place.id === selected.id));
     const kind = document.createElement('span'); kind.textContent = place.demo ? 'DEMONSTRATION · NO REWARD' : `BASE LOCATION ${place.id}${place.active ? '' : ' · INACTIVE'}`;
     const title = document.createElement('strong'); title.textContent = place.name;
     const theme = document.createElement('span'); theme.textContent = place.theme;
-    card.append(kind, title, theme); card.addEventListener('click', () => selectPlace(place)); $('trail-list').append(card);
-    const marker = document.createElement('button');
-    marker.className = 'marker'; marker.type = 'button'; marker.textContent = '◎';
-    marker.style.left = `${(Number(place.longitude) + 180) / 360 * 100}%`; marker.style.top = `${(90 - Number(place.latitude)) / 180 * 100}%`;
-    marker.setAttribute('aria-label', `${place.name}${place.demo ? ', demonstration only' : `, Base location ${place.id}`}`);
-    marker.setAttribute('aria-pressed', String(place.id === selected.id)); marker.addEventListener('click', () => selectPlace(place));
-    $('markers').append(marker);
+    card.append(kind, title, theme); card.addEventListener('click', () => { selectPlace(place); geographicMap?.focus(place); }); $('trail-list').append(card);
   }
+  geographicMap?.render(places, selected);
 }
 function selectPlace(place) {
   selected = place; claimApproval = null;
@@ -110,6 +117,7 @@ function showAdvisoryDistance() {
   const meters = advisoryDistanceMeters(location, selected);
   const distance = meters >= 1000 ? `${Math.round(meters / 1000)} km` : `${meters} m`;
   $('geo-status').textContent = `About ${distance} from ${selected.name} (straight-line guidance, ±${Math.round(location.accuracy)} m accuracy). Memory-only; not navigation or reward eligibility.`;
+  geographicMap?.location(location); pinning?.updateArrival();
 }
 function fillTokens() {
   document.querySelectorAll('#sponsor-token, #claim-token, .token-select').forEach(select => {
@@ -177,11 +185,11 @@ $('request-location').addEventListener('click', async () => {
     location = result;
     showAdvisoryDistance();
     $('clear-location').hidden = false;
-  } catch (error) { if (request === geoRequest) { location = null; $('clear-location').hidden = true; $('geo-status').textContent = error.message; } }
+  } catch (error) { if (request === geoRequest) { location = null; geographicMap?.location(null); pinning?.updateArrival(); $('clear-location').hidden = true; $('geo-status').textContent = error.message; } }
   finally { if (request === geoRequest) $('request-location').disabled = false; }
 });
-$('clear-location').addEventListener('click', () => { ++geoRequest; location = null; $('request-location').disabled = false; $('geo-status').textContent = 'Location cleared from this page. Participation does not require it.'; $('clear-location').hidden = true; });
-window.addEventListener('pagehide', () => { ++geoRequest; location = null; wallet.disconnect(); });
+$('clear-location').addEventListener('click', () => { ++geoRequest; location = null; geographicMap?.location(null); pinning?.updateArrival(); $('request-location').disabled = false; $('geo-status').textContent = 'Location cleared from this page. Participation does not require it.'; $('clear-location').hidden = true; });
+window.addEventListener('pagehide', () => { ++geoRequest; location = null; pinning?.dispose(); geographicMap?.destroy(); wallet.disconnect(); });
 $('profile-form').addEventListener('submit', event => { event.preventDefault(); journal.nickname = $('nickname').value; saveJournal(); });
 $('export-profile').addEventListener('click', exportProfile);
 $('clear-profile').addEventListener('click', () => { journal = emptyJournal(); try { localStorage.removeItem('decentpilgrimages:journal:v1'); } catch {} updateProfile(); selectPlace(selected); notice('Local journal forgotten. No wallet or claim state was changed.'); });

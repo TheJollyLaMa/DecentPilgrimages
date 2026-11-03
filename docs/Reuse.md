@@ -60,3 +60,16 @@ donor attributions. This app’s original NOTICE/LICENSE remain in force.
 Public approved evidence only is documented here. No private/root worktree
 findings or private donor state have been published into a Canopy snapshot.
 Candidate reuse is not a verified deployment or a tested live external service.
+
+## Geographic-gate follow-up
+
+The original Pilgrimages Leaflet map is restored using locally vendored upstream
+Leaflet 1.9.4 (BSD-2-Clause, license included), without copying its automatic GPS
+watcher. The receiving map adds explicit tile consent and accurate radius
+circles; real Chromium tests cover both basket modes, metadata recovery/hash,
+GPS inside/outside/denied states, tutorial and tile-failure boundaries.
+DecentMarket `2942cf8` product metadata and `DecentNFT_v0.3.sol` were inspected,
+not copied. Adapt its extensible metadata convention later; reject product
+mint ownership as an escrow/visit entitlement. The [geographic-gates guide](Geographic-Gates.md)
+records exact inspected surfaces, incompatibilities, the proposed optional NFT
+receipt and unimplemented verifier/production activation boundaries.

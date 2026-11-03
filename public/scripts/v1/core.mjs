@@ -62,9 +62,9 @@ export function microdegreesToDecimal(value) {
 }
 
 export const fixtures = Object.freeze([
-  { id: 'demo-care', name: 'The Care Trail', latitude: '37.774900', longitude: '-122.419400', radius: 200, mission: 'Notice a shared space that needs care. Plan a safe, permission-based cleanup with its community. Demonstration only: no registration, contract or reward is attached.', theme: 'Care for a shared place', demo: true },
-  { id: 'demo-memory', name: 'The Memory Trail', latitude: '51.507400', longitude: '-0.127800', radius: 250, mission: 'Listen to a place’s story. With permission, preserve a small piece of local history without exposing anyone’s identity. Demonstration only; agree on real missions with an organizer.', theme: 'Listen before documenting', demo: true },
-  { id: 'demo-canopy', name: 'The Canopy Trail', latitude: '35.676200', longitude: '139.650300', radius: 300, mission: 'Look for the life between buildings. Learn about a native plant and share a respectful observation. Do not enter private property or publish sensitive habitat coordinates. No reward is attached to this demo.', theme: 'Make room for living things', demo: true },
+  { id: 'demo-care', name: 'A little walk', latitude: '37.774900', longitude: '-122.419400', radius: 30, mission: 'Imagine a friend leaving a little encouragement at the end of a safe public walk. Stop, breathe, and tell your host what you noticed. Illustrative public-area pin only: no actual sponsor, route or tokens here. Never enter private property.', theme: 'A small reason to step outside', demo: true },
+  { id: 'demo-memory', name: 'The museum visit', latitude: '51.519413', longitude: '-0.126957', radius: 80, mission: 'A sponsor could help someone visit an exhibit and learn something new. Agree on access, opening times and a video check-in or private local-knowledge test. Illustrative museum-area pin only; no venue partnership, paid admission or funded collection is offered.', theme: 'Travel a little. Learn something.', demo: true },
+  { id: 'demo-canopy', name: 'The garden trail', latitude: '35.676200', longitude: '139.650300', radius: 60, mission: 'Imagine a sponsored visit to a garden: notice what is growing and share one thoughtful observation with your host. Illustrative public-area pin only, not a designated venue or funded stop. Respect paths, access rules and sensitive habitats.', theme: 'Make room for living things', demo: true },
 ]);
 
 export function normalizeLocation(location, id) {
@@ -90,18 +90,28 @@ export const emptyJournal = () => ({ schemaVersion: 1, nickname: '', savedTrailI
 export function requestAdvisoryLocation(geolocation) {
   if (!geolocation?.getCurrentPosition) return Promise.reject(new Error('Geolocation is unavailable. You can still explore freely.'));
   return new Promise((resolve, reject) => {
-    geolocation.getCurrentPosition(position => resolve({ latitude: position.coords.latitude, longitude: position.coords.longitude, accuracy: position.coords.accuracy }),
+    geolocation.getCurrentPosition(position => {
+      const { latitude, longitude, accuracy } = position.coords, timestamp = position.timestamp;
+      if (![latitude, longitude, accuracy, timestamp].every(Number.isFinite) || Math.abs(latitude) > 90 || Math.abs(longitude) > 180 || accuracy < 0) {
+        reject(new Error('Invalid location fix. No arrival was recorded.')); return;
+      }
+      resolve({ latitude, longitude, accuracy, timestamp });
+    },
       error => reject(new Error(error.code === 1 ? 'Location permission denied. Participation is still free; no data was saved.' : 'Location unavailable. Try later or explore without it.')),
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
   });
 }
 
 export function advisoryDistanceMeters(position, place) {
+  return Math.round(exactDistanceMeters(position, place));
+}
+
+export function exactDistanceMeters(position, place) {
   const radians = degrees => Number(degrees) * Math.PI / 180;
   const latitude = radians(place.latitude) - radians(position.latitude);
   const longitude = radians(place.longitude) - radians(position.longitude);
   const a = Math.sin(latitude / 2) ** 2 + Math.cos(radians(position.latitude)) * Math.cos(radians(place.latitude)) * Math.sin(longitude / 2) ** 2;
-  return Math.round(6371000 * 2 * Math.asin(Math.sqrt(Math.min(1, Math.max(0, a)))));
+  return 6371000 * 2 * Math.asin(Math.sqrt(Math.min(1, Math.max(0, a))));
 }
 
 export function assistantRequest(endpoint, question, consent) {
@@ -115,9 +125,9 @@ export function assistantRequest(endpoint, question, consent) {
 
 export const tutorial = Object.freeze([
   { title: 'Welcome, fellow traveler.', text: 'People sponsor your travels by placing tokens at places of pilgrimage along your route. Explore this preview without a wallet or location sharing.', target: '#start-tour' },
-  { title: 'Pick a place with purpose.', text: 'Select a marker or trail card to explore a stop. These are demo places with no tokens to collect. Check real-world access and safety before traveling.', target: '.marker' },
+  { title: 'Pick a place with purpose.', text: 'Select a geographic pin or stop card. Enable the street basemap only if you want to contact OpenStreetMap. Demo stops have no tokens. Respect access permission.', target: '#map' },
   { title: 'Keep your bearings private.', text: '“Use my location once” is optional high-accuracy guidance. Coordinates stay in memory, are never published, and do not prove reward eligibility.', target: '#request-location' },
-  { title: 'Arrange your collection.', text: 'Agree with the organizer on your journey and collection conditions. This Base preview requires approval for your wallet, stop, token and amount. Demo collection stays locked.', target: '#check-claim', fallback: '#open-help' },
+  { title: 'A visit, not just a GPS fix.', text: 'The next-level gate checks GPS distance and accuracy, then asks for a video check-in or private local-knowledge test. A verifier authorizes the visit; GPS alone cannot unlock tokens. Try an unfunded draft below.', target: '#pin-form' },
   { title: 'Your journal. Your journey.', text: 'The right ankh opens your local journal and backup. The left ankh opens the authorized sponsor and organizer desk. IPFS is not configured; nothing uploads.', target: 'decent-header', control: 'profile' },
   { title: 'Collect when it is ready.', text: 'Real collections need a configured deployment, funded stops and organizer approval. Only a successful confirmed receipt means tokens were collected. This preview and tutorial pay nothing.', target: '#refresh-chain', fallback: '#open-help' },
 ]);

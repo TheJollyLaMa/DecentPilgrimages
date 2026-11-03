@@ -9,12 +9,15 @@ npm test
 ```
 
 `npm test` runs `test:contracts` (15 local-EVM contract tests and six offline
-Etherscan V2 verification regressions), followed by the 36 Node UI tests.
+Etherscan V2 verification regressions, plus 14 isolated V2 basket-escrow tests),
+followed by the 39 Node UI tests.
 Explicit Hardhat selectors prevent Node UI tests from also running inside Mocha.
 CI uses this same sequential command and validates the inactive payroll queue.
 Imported donor licenses and the Head README retain exact pinned upstream bytes.
 Their existing whitespace is excluded from staged whitespace checks rather than
 rewriting third-party attribution; all application/source changes are checked.
+The vendored Leaflet distribution likewise retains npm package bytes (including
+upstream CRLF/whitespace), independently compared to installed Leaflet 1.9.4.
 
 `test/ui/core.test.mjs`: exact compiled/public/module ABI equality, configuration/
 wrong-chain/unavailable-RPC gates, integer decimals, BigNumber-to-string
@@ -72,7 +75,7 @@ fixture actions were used rather than claiming visible pointer automation.
 Those fixtures did not test live deployment/source verification, GPS providers,
 radio availability, OpenAI requests or payments.
 
-Final lifecycle validation: **36 UI tests pass** including non-allowlisted-owner
+Final lifecycle validation: **39 UI tests pass** including non-allowlisted-owner
 funding rejection, exact native/ERC20 recovery calls and failed-receipt rejection.
 A fresh integrated browser fixture confirmed the exact
 `IPFS · unconfigured · local files only` label, hidden **and disabled** generic
@@ -109,3 +112,26 @@ clicks open only the host dialog; no horizontal overflow; all three steps and
 the large backdrop render; Escape returns focus to the title; tutorial/help
 buttons close About and open the correct destination; zero external requests.
 A host-free fixture confirmed the generic Head About still opens by default.
+
+## Geographic-map and V2 escrow acceptance
+
+`npm run test:browser` runs three persistent real Chromium tests at 1024px/390px:
+local Leaflet marker/radius initialization, selecting real-coordinate stops,
+map-click draft positioning, exact hash/download/recovery, per-person versus
+first-collector budget, inside/outside/denied GPS and timed 60-second fix expiry,
+both explicitly unavailable
+visit services, invalidation on edits/rejected recovery, tile consent/failure,
+no horizontal overflow, no external traffic before consent, and all six hops
+from About. Tile requests are aborted by the test: this checks failure behavior,
+not live OSM availability. A separate integrated browser loaded actual OSM tiles
+after consent and visually confirmed the museum pin.
+
+`gates.test.mjs` measures fresh/uncertain/stale/boundary/error cases, including
+30.2 meters **not** rounding into a 30-meter gate, validates strict metadata and
+integer funding, and independently recomputes SHA-256 over exported bytes.
+Fourteen local-EVM V2 tests execute real native/ERC20 collection/refund,
+two distribution modes, cross-wallet/gate/chain/escrow/metadata/method proof
+rejection, short-lived proofs, funding/payout rollback, remaining reserves,
+ERC1271 acceptance/rejection and reentrant recipient protection.
+These are not a security audit or an implemented video/quiz attestation service.
+V1 remains on 0.8.24; isolated V2 uses 0.8.26/Cancun for current crypto helpers.

@@ -1,4 +1,4 @@
-name: Validate Base V1 and payroll
+name: Validate journeys and payroll
 on:
   pull_request:
     paths: ['contracts/**', 'scripts/**', 'assistant/**', 'public/**', 'payroll/**', 'test/**', 'package*.json', 'hardhat.config.js', '.github/workflows/**']
@@ -16,3 +16,5 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: node payroll/scripts/validatePayrollQueue.js
       - run: npm test
+      - run: npx --no-install playwright install --with-deps chromium
+      - run: npm run test:browser
