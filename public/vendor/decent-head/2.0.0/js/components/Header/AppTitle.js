@@ -29,7 +29,7 @@ export class AppTitle extends HTMLElement {
       image.src = icon; image.alt = ''; button.querySelector('.name').before(image);
     }
     this.shadowRoot.querySelector('p').textContent = config.subtitle;
-    button.onclick = () => this.dispatchEvent(new CustomEvent('decenthead:about', { bubbles:true, composed:true }));
+    button.onclick = () => this.dispatchEvent(new CustomEvent('decenthead:about', { bubbles:true, composed:true, cancelable:true }));
   }
   endRects() { return [...this.shadowRoot.querySelectorAll('.end')].filter(end => end.offsetParent).map(end => end.getBoundingClientRect()); }
 }

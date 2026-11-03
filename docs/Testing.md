@@ -9,7 +9,7 @@ npm test
 ```
 
 `npm test` runs `test:contracts` (15 local-EVM contract tests and six offline
-Etherscan V2 verification regressions), followed by the 35 Node UI tests.
+Etherscan V2 verification regressions), followed by the 36 Node UI tests.
 Explicit Hardhat selectors prevent Node UI tests from also running inside Mocha.
 CI uses this same sequential command and validates the inactive payroll queue.
 Imported donor licenses and the Head README retain exact pinned upstream bytes.
@@ -72,7 +72,7 @@ fixture actions were used rather than claiming visible pointer automation.
 Those fixtures did not test live deployment/source verification, GPS providers,
 radio availability, OpenAI requests or payments.
 
-Final lifecycle validation: **35 UI tests pass** including non-allowlisted-owner
+Final lifecycle validation: **36 UI tests pass** including non-allowlisted-owner
 funding rejection, exact native/ERC20 recovery calls and failed-receipt rejection.
 A fresh integrated browser fixture confirmed the exact
 `IPFS · unconfigured · local files only` label, hidden **and disabled** generic
@@ -95,3 +95,17 @@ cleanup integration, not uninterrupted streaming or deployment readiness.
 Stop the preview/helper process after bounded checks. Full production acceptance
 requires separately reviewed deployment metadata and operations; fixture
 success must never be described as deployed or paid.
+
+## Travel-sponsorship About redesign
+
+The About dialog is a 70-word, three-step infographic over an original inline
+temple SVG: Sponsor / Place / Pilgrimage. There are no dropdowns; project,
+contributor and original Polygon links are visible, with direct tutorial/help
+actions and a short preview/approval notice. `about.test.mjs` protects the
+semantic markup and cancelable title-event/default-modal contract.
+
+Separate headless Chromium acceptance at 1024px and 390px confirmed normal title
+clicks open only the host dialog; no horizontal overflow; all three steps and
+the large backdrop render; Escape returns focus to the title; tutorial/help
+buttons close About and open the correct destination; zero external requests.
+A host-free fixture confirmed the generic Head About still opens by default.

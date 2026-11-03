@@ -18,16 +18,13 @@ transfer feature is included.
 
 ## Legacy migration status
 
-The local legacy UI configuration has no chain ID, so it does not establish
-which network the historical addresses were intended for. Read-only parent
-probes report no deployed bytecode at the local registry address
-`0x4a50…5E2`, pilgrimage address `0x8FD1…7CC1`, or historical candidate
-`0x396e…181d` on Optimism mainnet (chain ID 10) or Optimism Sepolia
-(chain ID 11155420). This is not evidence that these addresses had no past
-deployments, balances, events, participant promises, or outstanding
-obligations; none of those have been resolved by the code check. The legacy
-chain, contract source matching, token holdings, and organizer obligations
-remain unverified. Do not treat v1 as a migration of state or a fulfillment
+The three legacy addresses are now confirmed deployed on **Polygon mainnet
+(137)**, with existing token custody in the current frontend journey.
+Earlier Optimism-only probes checked the wrong network. See the dated
+[Polygon findings](#legacy-polygon-findings-read-only-2026-11-02) below for
+addresses, pinned blocks, actual journey names and decoded funding/stop data.
+Contract source matching, a complete token inventory and organizer obligations
+remain unresolved. Do not treat v1 as a migration of state or a fulfillment
 of legacy promises. Any migration/reversion requires an independent,
 steward-approved review of historical deployment and event records before
 deployment or funding. The old source and ABI files remain unchanged.
@@ -211,3 +208,49 @@ reputation/risk signals are independent of source verification.
 
 Never report deployment or verification success unless the corresponding
 transaction/explorer state has been checked on the intended chain.
+# Legacy Polygon findings (read-only, 2026-11-02)
+
+The earlier Optimism probes were the wrong network for these deployments.
+Polygon mainnet (137) returns deployed bytecode at all three legacy addresses:
+
+- [Registry](https://polygonscan.com/address/0x4a50bbf238279E7F816Ef0Eaf523ae27962EC5E2):
+  3,274 runtime bytes. `getPilgrimages()` at block 96638974 lists the older
+  journey below, not the current frontend journey.
+- [Current frontend journey](https://polygonscan.com/address/0x8FD1A345F65D27a3c360933e38CC653E0dE37CC1):
+  14,701 runtime bytes; `pilgrimageName()` is **Zerb's Cool Cat Summer**.
+  At block 96638944 it has two active test stops and one approved sponsor.
+- [Older journey](https://polygonscan.com/address/0x396e0e11E26A3aCfF7BAcBe9d5943b6b4fdD181d):
+  11,761 runtime bytes; **DooBetter Blazes the East Coast (2025)**, zero locations
+  at block 96638944. The current ABI's `getWhitelistedSponsors()` reverts here:
+  historical versions are not interchangeable.
+
+Read-only RPC used PublicNode for current state. Historical transaction access
+there required an archive token; dRPC's public Polygon endpoint supplied the
+three historical transactions instead. Decoding the successful
+`addSponsorTokens` transaction
+[`0x758906…f9e29cb`](https://polygonscan.com/tx/0x758906e162dd2657a15d109f3604e9c43bee4e78382e13c1d5650e574f9e29cb)
+with the local ABI shows 10e18 raw units of
+[`0x81cCeF…00cd78`](https://polygonscan.com/address/0x81cCeF6414D4CDbed9FD6Ea98c2D00105800cd78).
+The token reports `SHT`, 18 decimals. At block 96638982, current journey custody
+is 10e18 raw units, with 10e18 minus 3 raw units in `sponsorBalances`.
+The two successful location transactions assign 1 and 2 **raw units**, not
+1 and 2 whole tokens. Their coordinates also contain small raw integers despite
+the local source's microdegree convention. Preserve these values; do not silently
+reinterpret or migrate them.
+
+Intent in local `public/contracts/DecentPilgrimage.sol` and the ABI:
+owner/approved sponsors fund ERC20s and create named geographic stops with token
+baskets; owner-approved participants collect a stop's entire remaining basket.
+The local source deactivates the stop after collection, tracks collected tokens,
+and does not prove physical arrival. It does **not** require the new Base
+version's separate approval for every wallet/location/asset/amount. Sponsor
+creation of stops and basket-level collection are also different from the new
+owner-only location creation and per-asset claims. Those are product differences
+to reconcile before treating Base V1 as a faithful replacement.
+
+PolygonScan's current-journey page offered **Verify and Publish**, not verified
+source, during inspection. ABI-compatible reads and transaction decoding do not
+prove full deployed-source equivalence. This was not a security audit, exhaustive
+transfer-history inventory or migration; other token balances and older-journey
+obligations remain unestablished. No wallet, write, transfer or source submission
+was used. Existing funds must not be treated as abandoned.

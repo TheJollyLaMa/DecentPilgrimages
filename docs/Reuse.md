@@ -21,13 +21,13 @@ or used as a state snapshot. This is not a whole-library search or live sync.
 No shared package was extracted: these are compatible receiving adaptations,
 not speculative architecture. Runtime is static native modules + local ethers,
 Node HTTP/fetch for optional helper, and existing root ethers for receipt tests.
-Base 8453 differs from historical presumed Optimism state; no donor chain address,
+Base 8453 differs from the now-confirmed legacy Polygon state; no donor chain address,
 private storage, auth session, budget, account or deployed fund is transplanted.
 Browser GPS never enters on-chain eligibility or the helper.
 
 ### Documented Head host-only component adaptation
 
-The pinned 2.0.0 release is adapted in only
+The pinned 2.0.0 release is adapted in
 `js/components/Header/IPFSStatus.js` and `IPFSControls.js` for this host’s
 local-files-only boundary. `providerLabel` explicitly says
 `unconfigured · local files only`; `ipfsControlsMode: 'host-only'` hides and
@@ -37,6 +37,16 @@ link. The version-1 host backup capability still opens the local journal.
 No private/shared `getIpfs()` facade or wallet lifecycle is monkeypatched.
 This is a documented receiving component patch, not an unchanged upstream
 release or a claim of configured Pinata/Kubo service.
+
+The host About infographic reuses the Head title's existing
+`decenthead:about` event. Two explicit compatibility changes in `AppTitle.js`
+and `Header.js` make that event cancelable and preserve the default modal unless
+the host cancels it. The app handles it during capture to open its own semantic
+dialog, with an original inline temple SVG, a three-stop sponsorship infographic,
+direct tutorial/help buttons and links. No private shadow methods or raw HTML
+configuration are used. The generic Head About remains the fallback for other
+hosts. Receiving tests cover this contract and browser acceptance checks both
+host and default behavior.
 
 ## Licenses / attribution
 

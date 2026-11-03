@@ -17,7 +17,7 @@ export class DecentHeader extends HTMLElement {
     this.shadowRoot.innerHTML = `<link rel="stylesheet" href="${css}" />
       <header><div class="dh-background" aria-hidden="true"></div><svg class="dh-wires" aria-hidden="true"></svg>
       <ipfs-status></ipfs-status><div class="dh-title-tools"><ankh-menu side="left"></ankh-menu><app-title></app-title><ankh-menu side="right"></ankh-menu></div><wallet-connect></wallet-connect></header><about-modal></about-modal>`;
-    this.shadowRoot.querySelector('app-title').addEventListener('decenthead:about', () => this.shadowRoot.querySelector('about-modal').open());
+    this.shadowRoot.querySelector('app-title').addEventListener('decenthead:about', event => { if (!event.defaultPrevented) this.shadowRoot.querySelector('about-modal').open(); });
     this.drawWires = () => cancelAnimationFrame(this.frame) || (this.frame = requestAnimationFrame(() => this.wire()));
     this.observer = new ResizeObserver(this.drawWires);
     this.observer.observe(this.shadowRoot.querySelector('header'));

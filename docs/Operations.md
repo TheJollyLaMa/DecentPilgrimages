@@ -15,7 +15,7 @@ do not deploy or claim source verification merely because UI tests pass.
    Keep the compiled `baseV1Abi`; `public/scripts/v1/abi.mjs`,
    `public/abis/DecentPilgrimageBaseV1.json` and
    `contracts/abi/DecentPilgrimageBaseV1.json` must match exactly.
-   Do not substitute any legacy ABI or Optimism address.
+   Do not substitute any legacy ABI or Polygon address.
 3. Configure each standard exact-transfer ERC20 as
    `{ address: ACTUAL_REVIEWED_ADDRESS, symbol: REVIEWED_SYMBOL, decimals: EXACT_ON_CHAIN_INTEGER }`.
    Native ETH is the **zero-address sentinel**, not a deployed token or copied

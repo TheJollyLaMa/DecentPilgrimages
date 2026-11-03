@@ -64,6 +64,27 @@
     </section>
     <footer><span>☥ DecentPilgrimages · Base V1</span><a href="https://github.com/TheJollyLaMa/DecentPilgrimages/issues/5">Integration & stewardship · #5</a><a href="https://github.com/TheJollyLaMa/DecentPilgrimages">Source & provenance</a><button id="open-profile">My local profile</button></footer>
   </main>
+  <dialog id="about-dialog" class="pilgrimage-about" aria-labelledby="about-title">
+    <svg class="temple-backdrop" viewBox="0 0 640 540" aria-hidden="true" focusable="false">
+      <path d="M50 180 320 35l270 145ZM85 205h470M100 455h440M65 485h510M30 520h580" />
+      <path d="M135 225v210m90-210v210m190-210v210m90-210v210" stroke-width="32" />
+      <circle cx="320" cy="135" r="22" />
+    </svg>
+    <button class="close" data-close aria-label="Close about">×</button>
+    <div class="about-content">
+      <span class="eyebrow">DECENT PILGRIMAGES</span>
+      <h2 id="about-title">A little support.<br>A meaningful journey.</h2>
+      <p class="about-intro">Sponsor someone's travels. Leave tokens at places of pilgrimage along their way.</p>
+      <ol class="journey-flow" aria-label="How a pilgrimage works">
+        <li><span class="journey-icon" aria-hidden="true">♡</span><h3>Sponsor</h3><p>Back a traveler.</p></li>
+        <li><span class="journey-icon" aria-hidden="true">⌖</span><h3>Place</h3><p>Tokens at meaningful stops.</p></li>
+        <li><span class="journey-icon" aria-hidden="true">☥</span><h3>Pilgrimage</h3><p>Travel. Visit. Collect.</p></li>
+      </ol>
+      <div class="actions about-actions"><button id="about-tour" class="primary">Follow the bunny 🐇</button><button id="about-help">How to take part</button></div>
+      <nav class="about-links" aria-label="Pilgrimage links"><a href="https://github.com/TheJollyLaMa/DecentPilgrimages">Project</a><a href="https://github.com/TheJollyLaMa/DecentPilgrimages/blob/main/wiki/Development-Payroll.md">Build with us</a><a href="https://polygonscan.com/address/0x8FD1A345F65D27a3c360933e38CC653E0dE37CC1">Original Polygon journey</a></nav>
+      <p class="about-footnote">Preview only · No live Base rewards. Real collections need funding and organizer approval; GPS alone unlocks nothing.</p>
+    </div>
+  </dialog>
   <dialog id="help-dialog" aria-labelledby="help-title"><button class="close" data-close aria-label="Close help">×</button><span class="eyebrow">THE SHORT PATH</span><h2 id="help-title">Show up. Do good. Keep agency.</h2>
     <ol class="steps"><li><strong>Explore freely.</strong> Demo trails work without a wallet. Verify real-world access and safety yourself.</li><li><strong>Agree on the mission.</strong> Ask an organizer what evidence they accept. Send any registration or sensitive evidence privately through an agreed channel; this app has no public registration form.</li><li><strong>Organizer review comes first.</strong> Only the deployed contract’s owner can approve a particular wallet, location, token and amount. GPS, tutorials, saved trails and issue assignments do not create eligibility.</li><li><strong>Check, then claim.</strong> Base configuration, sponsor funds, allocation and your exact on-chain approval must exist. A submitted transaction is not a paid claim; wait for its successful receipt.</li></ol>
     <h3>Development work & payroll</h3><p>Link acceptance evidence in the agreed public issue, omitting private data. A maintainer-approved bounty label and private registration are prerequisites, not guarantees. The empty payroll pipeline remains steward-disabled. Only verified canonical Base <code>PayrollPaid</code> receipts settle queue entries.</p>

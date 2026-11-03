@@ -45,11 +45,7 @@ window.DECENT_CONFIG = {
   chain: { chainId: 8453, chainName: 'Base', rpcUrls: ['https://mainnet.base.org'], nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 }, blockExplorerUrls: ['https://basescan.org'] },
   art: { titleEnds: ['', ''] },
   theme: { 'bg-1': '#101c1b', 'bg-2': '#162b28', 'bg-3': '#243c32', accent: '#afd8b5', 'accent-2': '#e9c477', title: '#e9c477', text: '#eef3e8', muted: '#b4c3b5' },
-  about: { title: 'About DecentPilgrimages', summary: 'Meaningful trails, free participation, private location and organizer-approved rewards on Base V1.',
-    sections: [{ title: 'A journey, not a promise', body: 'Explore without a wallet. Demo trails and this tutorial have no bounty. Agree on accepted work evidence and private registration with an organizer before expecting rewards.' },
-      { title: 'Review before reward', body: 'The on-chain owner must approve the exact participant wallet, location, token and amount. Browser location is advisory, never eligibility. Only successful confirmed receipts count as claims.' },
-      { title: 'Own your trail journal', body: 'The right ankh opens your local profile, export and recovery. GPS and wallet credentials are excluded. The left ankh opens the permission-checked organizer and sponsor desk. IPFS is explicit, not automatic.' },
-      { title: 'Honest operations', body: 'No Base contract address, activated payroll or assistant is shipped. Development work needs agreed acceptance evidence, steward review and verified receipts; issue assignments alone are not bounties.' }] },
+  about: { title: 'About DecentPilgrimages', summary: 'Sponsor a traveler. Place tokens along their journey. Collect at places of pilgrimage.', sections: [] },
   links: [{ label: 'Source & reuse provenance', url: 'https://github.com/TheJollyLaMa/DecentPilgrimages' }, { label: 'Help & experience team (#3)', url: 'https://github.com/TheJollyLaMa/DecentPilgrimages/issues/3' }],
   relatedDapps: [{ label: 'DecentCanopy', url: 'https://github.com/TheJollyLaMa/DecentCanopy' }, { label: 'DBuskRadio', url: 'https://github.com/A-Decent-Agency/DBuskRadio' }],
   ipfsAdapter: { version: 1, label: 'DecentPilgrimages journal',
@@ -152,6 +148,11 @@ async function perform(operation, { claim = false } = {}) {
 DecentHead.on('wallet', () => { client.invalidate(); claimApproval = null; updateGates(); $('claim-status').textContent = 'Wallet context changed. Explicitly read the Base deployment and recheck your approval.'; });
 
 const header = document.querySelector('decent-header');
+document.addEventListener('decenthead:about', event => {
+  if (event.target !== header) return;
+  event.preventDefault();
+  openDialog('about-dialog');
+}, { capture: true });
 for (const [side, dialogId, label] of [['left', 'organizer-dialog', 'Organizer & sponsor desk'], ['right', 'profile-dialog', 'My local profile']]) {
   const ankh = header.shadowRoot.querySelector(`ankh-menu[side="${side}"]`);
   const button = ankh.shadowRoot.querySelector('button');
@@ -273,6 +274,8 @@ $('tour-dialog').addEventListener('close', endTour);
 $('tour-dialog').addEventListener('keydown', event => { if (event.key === 'Escape') { event.preventDefault(); closeDialog($('tour-dialog')); } });
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && $('tour-dialog').open) { event.preventDefault(); closeDialog($('tour-dialog')); } });
 $('start-tour').addEventListener('click', startTour); $('help-tour').addEventListener('click', startTour);
+$('about-tour').addEventListener('click', () => { $('about-dialog').close(); startTour(); });
+$('about-help').addEventListener('click', () => { $('about-dialog').close(); openDialog('help-dialog'); });
 $('tour-back').addEventListener('click', () => { if (tourIndex) { --tourIndex; showTourStep(); } });
 $('tour-next').addEventListener('click', () => { if (tourIndex === tutorial.length - 1) { journal.tutorialComplete = true; saveJournal(); closeDialog($('tour-dialog')); notice('Tutorial complete. No reward or eligibility was created.'); } else { ++tourIndex; showTourStep(); } });
 fillTokens(); selectPlace(selected); updateProfile(); helperGates();

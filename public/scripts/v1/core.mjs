@@ -114,11 +114,11 @@ export function assistantRequest(endpoint, question, consent) {
 }
 
 export const tutorial = Object.freeze([
-  { title: 'Welcome, fellow traveler.', text: 'You can explore every demo trail without connecting a wallet or sharing your location. This bunny does not request either.', target: '#start-tour' },
-  { title: 'Pick a place with purpose.', text: 'Select a map marker or a trail card. Demo trails are examples, never paid bounties. Verify real-world access and safety yourself.', target: '.marker' },
+  { title: 'Welcome, fellow traveler.', text: 'People sponsor your travels by placing tokens at places of pilgrimage along your route. Explore this preview without a wallet or location sharing.', target: '#start-tour' },
+  { title: 'Pick a place with purpose.', text: 'Select a marker or trail card to explore a stop. These are demo places with no tokens to collect. Check real-world access and safety before traveling.', target: '.marker' },
   { title: 'Keep your bearings private.', text: '“Use my location once” is optional high-accuracy guidance. Coordinates stay in memory, are never published, and do not prove reward eligibility.', target: '#request-location' },
-  { title: 'Let the organizer review.', text: 'The highlighted approval-check control remains disabled for demos or missing deployment. Agree privately on evidence and registration; only the deployed owner can approve an exact wallet, trail, token and amount.', target: '#check-claim', fallback: '#open-help' },
-  { title: 'Bring your own agency.', text: 'The right ankh opens your local journal/recovery. The left ankh is permission-checked: owners can cancel approvals, pause trails, release unused allocations, and recover only unallocated funds to a reviewed recipient. Even owners must allowlist their own wallet to sponsor. IPFS is local-files-only; nothing uploads.', target: 'decent-header', control: 'profile' },
-  { title: 'Receipts, not promises.', text: 'The highlighted Base-read button stays locked until configured. A claim succeeds only after a confirmed successful receipt. Development payroll is separately steward-gated. Finish returns to help if the read control is disabled. There is no tutorial reward.', target: '#refresh-chain', fallback: '#open-help' },
+  { title: 'Arrange your collection.', text: 'Agree with the organizer on your journey and collection conditions. This Base preview requires approval for your wallet, stop, token and amount. Demo collection stays locked.', target: '#check-claim', fallback: '#open-help' },
+  { title: 'Your journal. Your journey.', text: 'The right ankh opens your local journal and backup. The left ankh opens the authorized sponsor and organizer desk. IPFS is not configured; nothing uploads.', target: 'decent-header', control: 'profile' },
+  { title: 'Collect when it is ready.', text: 'Real collections need a configured deployment, funded stops and organizer approval. Only a successful confirmed receipt means tokens were collected. This preview and tutorial pay nothing.', target: '#refresh-chain', fallback: '#open-help' },
 ]);
 import { baseV1Abi } from './abi.mjs';

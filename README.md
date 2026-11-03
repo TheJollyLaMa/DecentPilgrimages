@@ -21,7 +21,7 @@ No external model, deployed-chain, radio or payment calls are made by these
 tests. Contract tests use a local EVM; helper/receipt/wallet/radio tests use
 fixtures and loopback servers.
 `npm test` runs the explicit contract/verification selectors and then the UI
-runner once: 21 local-EVM/offline verification tests and 35 UI tests.
+runner once: 21 local-EVM/offline verification tests and 36 UI tests.
 
 ## Available now
 
@@ -60,10 +60,12 @@ pin controls; the supported host capability opens only local journal backup.
 **No Base address is deployed/configured. No payroll is enabled. No helper/model
 key is configured. No payments or live OpenAI tests have occurred.**
 Demo trails and tutorial completion have no bounty. Historical presumed
-Optimism contracts/ABIs remain in `public/contracts/` and `public/abis/`;
+Polygon contracts/ABIs remain in `public/contracts/` and `public/abis/`;
 their old fake-whitelist scripts are preserved but never loaded by this UI.
-Old deployment chain/addresses are unverified; the newly versioned V1 is not
-an in-place migration of old chain state.
+The three legacy addresses are now confirmed on Polygon, including existing
+token custody. Deployed-source equivalence and migration obligations still need
+review; the newly versioned V1 is not an in-place migration of old chain state.
+See the read-only Polygon findings in the contract runbook.
 
 Configure only after review: [Operations](docs/Operations.md),
 [contract runbook](docs/contracts/base-v1.md),
