@@ -74,3 +74,12 @@ test('caller workflows use the same immutable Head kit, safe public root and app
   assert.match(prepare, /price_usdc: '10000000'/);
   assert.match(announce, /vars.SUPPORTER_DISCORD_ENABLED == 'true'/);
 });
+
+test('public-only static distribution retains project NOTICE and exact full license texts', async () => {
+  const notice = await read('public/NOTICE');
+  assert.ok(notice.startsWith((await read('NOTICE')).trimEnd()));
+  assert.equal(await read('LICENSE'), await read('public/vendor/decent-head/2.0.0/LICENSE'));
+  assert.equal(await read('LICENSES/CC-BY-4.0.txt'), await read('public/vendor/decent-head/2.0.0/LICENSES/CC-BY-4.0.txt'));
+  assert.match(notice, /https:\/\/creativecommons.org\/licenses\/by\/4.0\//);
+  assert.match(await read('public/index.html'), /href="\.\/NOTICE"/);
+});

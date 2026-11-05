@@ -22,7 +22,7 @@ No external model, deployed-chain, radio or payment calls are made by these
 tests. Contract tests use a local EVM; helper/receipt/wallet/radio tests use
 fixtures and loopback servers.
 `npm test` runs the explicit contract/verification selectors and then the UI
-runner once: 35 local-EVM/offline verification tests and 43 UI tests.
+runner once: 35 local-EVM/offline verification tests and 44 UI tests.
 `test:browser` adds six real Chromium map/gate/arrival/tutorial/About tests; install
 its browser once with `npx playwright install chromium` if unavailable.
 

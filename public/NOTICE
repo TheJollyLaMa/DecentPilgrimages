@@ -1,0 +1,38 @@
+DecentPilgrimages
+Copyright 2025-2026 The Jolly LaMa (TheJollyLaMa) and A Decent Agency contributors
+
+DecentPilgrimages is one of the "Decent Frankensteins" of A Decent Agency.
+  Project:  https://github.com/TheJollyLaMa/DecentPilgrimages
+  Umbrella: https://github.com/A-Decent-Agency
+
+Source code in this repository is licensed under the Apache License,
+Version 2.0 (see LICENSE). Original artwork, images, written documentation
+and other non-code creative content are licensed under Creative Commons
+Attribution 4.0 International (CC BY 4.0, see LICENSES/CC-BY-4.0.txt),
+unless a file says otherwise.
+
+A head nod, please. If you use, fork, remix or redistribute this work,
+keep this NOTICE file with it and credit "The Jolly LaMa / A Decent Agency"
+with a link to the project above. Apache-2.0 section 4(d) requires this
+NOTICE to travel with redistributions and derivative works.
+
+Not covered by these licenses:
+- Third-party libraries, fonts and assets keep their own licenses and
+  notices.
+- The names "A Decent Agency", the "Decent..." product names and their
+  logos are not licensed beyond describing where the work came from
+  (Apache-2.0 section 6).
+
+Earlier versions released under a previous license remain available under
+that license; this notice applies to the project from 2026-10-21 onward.
+
+Support the work: https://thejollylama.github.io/DecentMarket/ (Supporter DNFTs)
+
+Static distribution license locations (relative to this NOTICE):
+- Apache-2.0 full text: vendor/decent-head/2.0.0/LICENSE
+- CC BY 4.0 full text: vendor/decent-head/2.0.0/LICENSES/CC-BY-4.0.txt
+These full texts match the source repository LICENSE and LICENSES/CC-BY-4.0.txt.
+CC BY 4.0 canonical URL: https://creativecommons.org/licenses/by/4.0/
+- DecentHead attribution: vendor/decent-head/2.0.0/NOTICE
+- Leaflet BSD license: vendor/leaflet/1.9.4/LICENSE
+- ethers MIT license: vendor/decent-head/2.0.0/js/vendor/ethers.LICENSE.md

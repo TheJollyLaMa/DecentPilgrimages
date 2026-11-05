@@ -10,7 +10,7 @@ npm test
 
 `npm test` runs `test:contracts` (15 local-EVM contract tests and six offline
 Etherscan V2 verification regressions, plus 14 isolated V2 basket-escrow tests),
-followed by the 43 Node UI tests (including four Supporter regressions).
+followed by the 44 Node UI tests (including five Supporter regressions).
 Explicit Hardhat selectors prevent Node UI tests from also running inside Mocha.
 CI uses this same sequential command and validates the inactive payroll queue.
 Imported donor licenses and the Head README retain exact pinned upstream bytes.
@@ -23,7 +23,8 @@ upstream CRLF/whitespace), independently compared to installed Leaflet 1.9.4.
 
 `test/ui/supporter.test.mjs` verifies the default receipt-free unavailable state,
 the reviewed-public-receipt/external-checkout gate, wrong-chain/price/edition/
-receipt rejection, hostile/duplicate URL rejection and immutable kit caller pins.
+receipt rejection, hostile/duplicate URL rejection, immutable kit caller pins and
+preserved static-distribution NOTICE/full license texts.
 It never sends transactions or treats a synthetically shaped receipt as live
 evidence. The browser card is not an independent chain verifier.
 
@@ -34,7 +35,7 @@ limitations, no overflow, Escape dismissal and no external network requests.
 All browser servers use private ephemeral loopback ports; the shared preview
 on port 8823 is not stopped or modified.
 
-Final local validation: 35 contract/offline tests, 43 UI tests and six browser
+Final local validation: 35 contract/offline tests, 44 UI tests and six browser
 tests passed; disabled/empty payroll validation and source diff checks passed.
 YAML parsing and immutable caller `uses`/`head_ref` equality were checked.
 See [release scope and outstanding activation gates](Supporter-Release.md).

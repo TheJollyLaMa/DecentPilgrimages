@@ -46,6 +46,10 @@ and `price_usdc: '10000000'`. The exact-tag source archive is the repository;
 only the selected public directory is the runnable site.
 Never serve the repository root or expose assistant/payroll configuration.
 Preview with `node assistant/static-server.mjs`; it serves only `public/`.
+The pinned static subtree includes `public/NOTICE` preserving the project's
+complete attribution plus paths to the byte-identical full Apache-2.0/CC BY 4.0
+texts already shipped with the pinned Head vendor. About links to those credits;
+the static pin does not rely on the separate repository archive for attribution.
 
 Public browser configuration:
 
@@ -127,7 +131,7 @@ deployment configuration, deployment-script target, static-root boundary and
 existing acceptance suites. No new financial code was needed for this Supporter
 release. This is not a formal audit or deployed-source equivalence finding.
 
-- `npm test`: **35 local-EVM/offline verification tests + 43 UI tests passed**.
+- `npm test`: **35 local-EVM/offline verification tests + 44 UI tests passed**.
   Includes unauthorized actions, reservations/cancellation/recovery, claim receipt
   identity, rejected signatures, wallet/network changes, absent deployment,
   unavailable provider/helper and exact decimals.
