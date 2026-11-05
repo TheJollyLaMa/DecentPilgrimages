@@ -8,7 +8,20 @@ Gate V2 prototype models funded token baskets and verifier-attested visits.
 Canonical app URL: **https://thejollylama.github.io/DecentPilgrimages/**.
 The legacy Pages root uses a small `index.html` redirect into `public/`,
 preserving query/hash. Direct app: https://thejollylama.github.io/DecentPilgrimages/public/.
-Parent verifies deployed root/About acceptance after publishing this correction.
+The deployed root/About and corrected title were browser-checked after publication.
+
+ENS website: **[decentpilgrimages.decentagency.eth](https://decentpilgrimages.decentagency.eth.limo)**.
+It serves the reviewed v0.1.1 public build at `a2f5930`, with the title on one
+line where it fits and whole-word stacking only on the narrowest screens.
+Its project-specific temple avatar/banner and site records were verified on
+Ethereum using two RPC endpoints on 2026-11-05; the DecentAgency owner retains
+the subname. [Public deployment evidence](https://github.com/TheJollyLaMa/DecentCanopy/blob/main/data/ens-project-deployments.json)
+records the exact CID and successful transactions.
+
+ENS is a dated public site snapshot, not a journey deployment, reward activation
+or Supporter mint receipt. Frozen v0.1.1 NFT metadata/art remain unchanged, and
+v0.1.0 remains superseded. `SUPPORTER_ENS_NAME` configures this name for future
+release preparations only. Gateways may cache older DNS/content responses.
 
 ## Run & verify locally
 
