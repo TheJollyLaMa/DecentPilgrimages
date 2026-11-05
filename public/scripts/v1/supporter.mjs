@@ -1,5 +1,5 @@
 export const supporterEdition = Object.freeze({
-  version: 'v0.1.0',
+  version: 'v0.1.1',
   chainId: 8453,
   supply: '1000',
   priceUSDC: '10000000',

@@ -5,6 +5,11 @@ optional location is advisory, memory-only and never reward eligibility.
 The existing Base V1 adapter uses organizer-approved claims. The separate
 Gate V2 prototype models funded token baskets and verifier-attested visits.
 
+Canonical app URL: **https://thejollylama.github.io/DecentPilgrimages/**.
+The legacy Pages root uses a small `index.html` redirect into `public/`,
+preserving query/hash. Direct app: https://thejollylama.github.io/DecentPilgrimages/public/.
+Parent verifies deployed root/About acceptance after publishing this correction.
+
 ## Run & verify locally
 
 Requires Node 22+; no UI build step.
@@ -23,7 +28,7 @@ tests. Contract tests use a local EVM; helper/receipt/wallet/radio tests use
 fixtures and loopback servers.
 `npm test` runs the explicit contract/verification selectors and then the UI
 runner once: 35 local-EVM/offline verification tests and 44 UI tests.
-`test:browser` adds six real Chromium map/gate/arrival/tutorial/About tests; install
+`test:browser` adds ten real Chromium map/gate/arrival/tutorial/About/title/redirect tests; install
 its browser once with `npx playwright install chromium` if unavailable.
 
 ## Available now
@@ -88,7 +93,7 @@ is minted; metadata/NFT reuse recommendations are in the geographic-gates guide.
 
 ## Versioned Supporter edition · preparing
 
-The proposed **v0.1.0** Supporter edition is optional development support:
+The corrective **v0.1.1** Supporter edition is optional development support:
 **1,000 editions at 10 USDC (`10000000`) on Base**, using the existing
 NFT `0xe63EC9f8228720bAAC2fD528C0A6d06B3Dc5439B` and community escrow
 `0x31b07b83e99A9bdF379bf40225b8A80d3804C89d`.
@@ -102,15 +107,19 @@ returns or future delivery. It is not a reward allocation or contributor payment
 Base V1, payroll and helper activation remain separately gated.
 
 The standard caller workflows pin DecentHead
-`2b87543db1ff5c44c720e5c7f782386bbd702bc1`, render/pin only `public/` as the
+`599241344849af1921f6a9a59431f4b2f300d417`, render/pin only `public/` as the
 runnable site (no build), and archive the exact tagged source. The user has
 configured repository `PINATA_JWT`; the parent verified its name without reading
 its value. Announcements remain disabled unless
 explicitly enabled/configured; no ENS change is authorized by this work.
 See [Supporter release scope, evidence and all issue/PR/branch dispositions](docs/Supporter-Release.md).
-The planned GitHub release is non-prerelease, named **v0.1.0 · sponsored-journey
+The planned GitHub release is non-prerelease, named **v0.1.1 · sponsored-journey
 preview**; that publication flag does not imply production maturity or activate
-Base V1. [Release notes body](docs/releases/v0.1.0.md).
+Base V1. [Release notes body](docs/releases/v0.1.1.md).
+Prepared **v0.1.0 remains frozen, unminted and superseded**: art review found
+orphan characters in the app header and generic card title. v0.1.1 corrects the
+app's natural **Decent Pilgrimages** word-boundary/responsive typography and pins
+the corrected shared renderer. No financial or service functionality activates.
 
 ## Logical public team jobs
 

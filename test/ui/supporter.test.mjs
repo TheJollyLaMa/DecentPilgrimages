@@ -10,12 +10,13 @@ const fixture = () => ({
     ...supporterEdition, verification: undefined,
     tokenId: '7', listingId: '3', mintTxHash: `0x${'a'.repeat(64)}`,
     verifiedBlock: 100, confirmations: 12,
-    evidenceUrl: 'https://github.com/TheJollyLaMa/DecentPilgrimages/releases/download/v0.1.0/supporter-mint-evidence.json',
+    evidenceUrl: 'https://github.com/TheJollyLaMa/DecentPilgrimages/releases/download/v0.1.1/supporter-mint-evidence.json',
     purchaseUrl: `https://thejollylama.github.io/DecentHead/supporter/buy.html?chainId=8453&escrow=${supporterEdition.escrow}&listingId=3`,
   },
 });
 
 test('default edition stays unavailable without a receipt and cannot construct a listing', async () => {
+  assert.equal(supporterEdition.version, 'v0.1.1');
   assert.equal(supporterLinks(), null);
   mountSupporterCard({ getElementById() { assert.fail('pending state must not mutate purchase links'); } });
   const html = await read('public/index.html');
@@ -23,6 +24,7 @@ test('default edition stays unavailable without a receipt and cannot construct a
   assert.match(html, /id="supporter-checkout" hidden(?![^>]*href)/);
   assert.match(html, /id="supporter-evidence" hidden(?![^>]*href)/);
   assert.match(html, /proof of health, financial functionality/);
+  assert.match(html, /id="supporter-title">Support this journey · v0\.1\.1</);
 });
 
 test('reviewed receipt can link only to pinned external checkout and versioned public evidence', () => {
@@ -45,7 +47,7 @@ test('malformed, incomplete, unconfirmed, wrong-price or mismatched evidence fai
     { nftContract: supporterEdition.escrow }, { escrow: supporterEdition.nftContract },
     { evidenceUrl: 'https://example.com/evidence.json' },
     { evidenceUrl: 'https://github.com/TheJollyLaMa/DecentPilgrimages/releases/download/v0.2.0/evidence.json' },
-    { evidenceUrl: 'https://github.com/TheJollyLaMa/DecentPilgrimages/releases/download/v0.1.0/evidence.json?secret=bad' },
+    { evidenceUrl: 'https://github.com/TheJollyLaMa/DecentPilgrimages/releases/download/v0.1.1/evidence.json?secret=bad' },
     { purchaseUrl: 'javascript:alert(1)' }, { purchaseUrl: 'https://thejollylama.github.io/DecentHead/' },
   ];
   for (const patch of patches) {
@@ -59,12 +61,16 @@ test('malformed, incomplete, unconfirmed, wrong-price or mismatched evidence fai
     assert.equal(supporterLinks(edition), null, suffix);
   }
   assert.equal(supporterLinks({ ...fixture(), supply: '100' }), null);
+  const superseded = fixture();
+  superseded.verification.version = 'v0.1.0';
+  superseded.verification.evidenceUrl = superseded.verification.evidenceUrl.replace('v0.1.1', 'v0.1.0');
+  assert.equal(supporterLinks(superseded), null);
 });
 
 test('caller workflows use the same immutable Head kit, safe public root and approved edition units', async () => {
   const prepare = await read('.github/workflows/supporter-release.yml');
   const announce = await read('.github/workflows/supporter-announce.yml');
-  const sha = '2b87543db1ff5c44c720e5c7f782386bbd702bc1';
+  const sha = '599241344849af1921f6a9a59431f4b2f300d417';
   for (const file of [prepare, announce]) {
     assert.match(file, new RegExp(`uses: TheJollyLaMa/DecentHead/.github/workflows/product-supporter-\\w+.yml@${sha}`));
     assert.match(file, new RegExp(`head_ref: ${sha}`));

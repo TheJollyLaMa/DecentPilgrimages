@@ -53,7 +53,7 @@ function exportProfile() {
 }
 
 window.DECENT_CONFIG = {
-  version: '2.0.0', appName: 'DecentPilgrimages', subtitle: 'Your trail. Your agency.',
+  version: '2.0.0', appName: 'Decent Pilgrimages', subtitle: 'Your trail. Your agency.',
   providerLabel: 'unconfigured · local files only', ipfsControlsMode: 'host-only',
   ens: { enabled: false },
   chain: { chainId: 8453, chainName: 'Base', rpcUrls: ['https://mainnet.base.org'], nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 }, blockExplorerUrls: ['https://basescan.org'] },
@@ -67,6 +67,12 @@ window.DECENT_CONFIG = {
     capabilities: { backup: { open: async () => { updateProfile(); openDialog('profile-dialog'); } } } },
 };
 const { DecentHead } = await import('../../vendor/decent-head/2.0.0/js/main.js');
+const titleRoot = document.querySelector('decent-header')?.shadowRoot?.querySelector('app-title')?.shadowRoot;
+if (titleRoot) {
+  const style = document.createElement('style');
+  style.textContent = 'button{font-size:clamp(12px,8cqi,48px)}.name{overflow-wrap:normal;word-break:normal}';
+  titleRoot.append(style);
+}
 const { loadEthers } = await import('../../vendor/decent-head/2.0.0/js/wallet.js');
 const wallet = DecentHead.getWallet();
 const getSession = () => wallet.snapshot();

@@ -2,6 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
 const { createHash } = require("node:crypto");
+const { readFile } = require("node:fs/promises");
 
 const wallet = `0x${"1".repeat(40)}`, verifier = `0x${"2".repeat(40)}`;
 async function fixture(t, options = {}) {
@@ -134,6 +135,7 @@ for (const width of [320, 390, 1024]) {
         const about = page.locator("#about-dialog");
         await about.waitFor({ state: "visible" });
         await page.locator("#supporter-title").scrollIntoViewIfNeeded();
+        assert.match(await page.locator("#supporter-title").innerText(), /v0\.1\.1$/);
         assert.match(await about.innerText(), /1,000 editions, 10 USDC/);
         assert.match(await page.locator("#supporter-status").innerText(), /No verified mint receipt or listing/);
         assert.equal(await page.locator("#supporter-preparing").isDisabled(), true);
@@ -141,6 +143,7 @@ for (const width of [320, 390, 1024]) {
             assert.equal(await page.locator(`#${id}`).isVisible(), false);
             assert.equal(await page.locator(`#${id}`).getAttribute("href"), null);
         }
+
         assert.match(await about.innerText(), /not a travel reward or proof of health, financial functionality/);
         const dimensions = await about.evaluate(node => ({ client: node.clientWidth, scroll: node.scrollWidth }));
         assert.ok(dimensions.scroll <= dimensions.client, JSON.stringify(dimensions));
@@ -150,3 +153,77 @@ for (const width of [320, 390, 1024]) {
         assert.deepEqual(errors, []);
     });
 }
+
+for (const width of [1440, 390, 320]) {
+    test(`project header wraps only at the word boundary without orphan characters at ${width}px`, async t => {
+        const { page, errors } = await fixture(t, { viewport: { width, height: 900 } });
+        await page.evaluate(() => document.fonts.ready);
+        const title = page.locator("decent-header app-title .name");
+        assert.equal(await title.innerText(), "Decent Pilgrimages");
+        const layout = await title.evaluate(node => {
+            const text = node.firstChild;
+            const characters = [...text.textContent].map((character, index) => {
+                const range = document.createRange();
+                range.setStart(text, index); range.setEnd(text, index + 1);
+                const rect = range.getBoundingClientRect();
+                return { character, top: Math.round(rect.top), left: rect.left, right: rect.right };
+            });
+            const button = node.closest("button").getBoundingClientRect();
+            return { characters, left: button.left, right: button.right, viewport: innerWidth };
+        });
+        for (const [start, end] of [[0, 6], [7, 18]]) {
+            const word = layout.characters.slice(start, end);
+            assert.equal(new Set(word.map(character => character.top)).size, 1, JSON.stringify(layout));
+            assert.ok(word.every(character => character.left >= layout.left - 1 && character.right <= layout.right + 1), JSON.stringify(layout));
+        }
+
+        assert.ok(layout.left >= 0 && layout.right <= layout.viewport, JSON.stringify(layout));
+        assert.deepEqual(errors, []);
+    });
+}
+
+test("legacy Pages root redirects into public app preserving query/hash and shows pending About", async t => {
+    const { createStaticServer } = await import("../../assistant/static-server.mjs");
+    const { createServer } = require("node:http");
+    const app = createStaticServer();
+    await new Promise(resolve => app.listen(0, "127.0.0.1", resolve));
+    t.after(() => new Promise(resolve => { app.closeAllConnections(); app.close(resolve); }));
+    const redirect = await readFile(new URL("../../index.html", require("node:url").pathToFileURL(__filename)), "utf8");
+    const server = createServer(async (request, response) => {
+        const url = new URL(request.url, "http://localhost");
+        if (url.pathname === "/DecentPilgrimages/") {
+            response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+            response.end(redirect);
+            return;
+        }
+        if (!url.pathname.startsWith("/DecentPilgrimages/public/")) { response.writeHead(404); response.end(); return; }
+        const upstream = await fetch(`http://127.0.0.1:${app.address().port}${url.pathname.slice("/DecentPilgrimages/public".length)}${url.search}`);
+        response.writeHead(upstream.status, { "Content-Type": upstream.headers.get("content-type") });
+        response.end(Buffer.from(await upstream.arrayBuffer()));
+    });
+    await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
+    t.after(() => new Promise(resolve => { server.closeAllConnections(); server.close(resolve); }));
+    const browser = await chromium.launch({ headless: true });
+    t.after(() => browser.close());
+    const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    const base = `http://127.0.0.1:${server.address().port}`;
+    const errors = [], external = [];
+    page.on("pageerror", error => errors.push(error.message));
+    await page.route("**/*", route => {
+        if (new URL(route.request().url()).origin === base) return route.continue();
+        external.push(route.request().url());
+        return route.abort();
+    });
+    await page.goto(`${base}/DecentPilgrimages/?entry=root&example=a%20b#supporter`);
+    await page.waitForURL(`${base}/DecentPilgrimages/public/?entry=root&example=a%20b#supporter`);
+    await page.locator("#map .marker").first().waitFor();
+    await page.locator("decent-header app-title button").click();
+    await page.locator("#about-dialog").waitFor({ state: "visible" });
+    assert.match(await page.locator("#supporter-title").innerText(), /v0\.1\.1$/);
+    assert.match(await page.locator("#supporter-status").innerText(), /Preparing.*No verified mint receipt/);
+    assert.equal(await page.locator("#supporter-preparing").isDisabled(), true);
+    assert.equal(await page.locator("#supporter-checkout").getAttribute("href"), null);
+    assert.equal(await page.locator("#supporter-checkout").isVisible(), false);
+    assert.deepEqual(errors, []);
+    assert.deepEqual(external, []);
+});

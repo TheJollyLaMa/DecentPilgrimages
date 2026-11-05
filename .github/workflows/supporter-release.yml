@@ -15,10 +15,10 @@ concurrency:
   cancel-in-progress: false
 jobs:
   prepare:
-    uses: TheJollyLaMa/DecentHead/.github/workflows/product-supporter-prepare.yml@2b87543db1ff5c44c720e5c7f782386bbd702bc1
+    uses: TheJollyLaMa/DecentHead/.github/workflows/product-supporter-prepare.yml@599241344849af1921f6a9a59431f4b2f300d417
     with:
       tag: ${{ inputs.tag || github.event.release.tag_name }}
-      head_ref: 2b87543db1ff5c44c720e5c7f782386bbd702bc1
+      head_ref: 599241344849af1921f6a9a59431f4b2f300d417
       site_root: public
       product_name: DecentPilgrimages
       tagline: A little support. A meaningful journey.

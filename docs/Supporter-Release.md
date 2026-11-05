@@ -1,10 +1,15 @@
-# v0.1.0 · sponsored-journey preview Supporter edition
+# v0.1.1 · corrective sponsored-journey preview Supporter edition
 
-Release-readiness review: 2026-11-05. Recommended tag: **v0.1.0** (not created).
-Parent plans a **non-prerelease** GitHub release named **v0.1.0 ·
-sponsored-journey preview**. That release flag is a publication choice, not
+Release-readiness review: 2026-11-05. Recommended corrective tag: **v0.1.1** (not created here).
+Parent plans a **non-prerelease** GitHub release named **v0.1.1 ·
+sponsored-journey preview** for v0.1.1. That release flag is a publication choice, not
 production maturity or approval to activate financial functionality.
-The exact release-notes body is [docs/releases/v0.1.0.md](releases/v0.1.0.md).
+The exact release-notes body is [docs/releases/v0.1.1.md](releases/v0.1.1.md).
+Prepared v0.1.0 remains frozen, **unminted and superseded** after front-art review
+found orphan characters in the app header and generic card title. Do not replace
+its frozen assets or use its old mint issue as signing authorization. Parent
+coordinates explicit mint-issue supersession. v0.1.1 changes typography and the
+shared renderer pin only; it does not activate functionality.
 This is a versioned development-support artifact, **not an activated Base reward
 service**. A Supporter purchase does not prove health, financial functionality,
 deployment safety, profitability, a contributor entitlement or future delivery.
@@ -40,8 +45,15 @@ transaction, ENS change, tag, release or workflow dispatch is part of this revie
 | Unit price | 10 USDC, six decimals: `10000000` |
 | Existing NFT | `0xe63EC9f8228720bAAC2fD528C0A6d06B3Dc5439B` |
 | Community escrow | `0x31b07b83e99A9bdF379bf40225b8A80d3804C89d` |
-| Shared kit | DecentHead `2b87543db1ff5c44c720e5c7f782386bbd702bc1` |
+| Shared kit | DecentHead `599241344849af1921f6a9a59431f4b2f300d417` |
 | Runnable static root | `public/`; entry `public/index.html`; no build |
+
+Canonical app URL: https://thejollylama.github.io/DecentPilgrimages/.
+Legacy GitHub Pages main-root publishing previously displayed the README.
+A bounded repository-root `index.html` now redirects to `public/`, retaining
+query/hash; it does not change Pages settings or the safe local static root.
+The exact-tag IPFS site remains flattened from `public/` with no redirect needed.
+Parent validates the deployed canonical URL and About after publication.
 
 Final caller files: `.github/workflows/supporter-release.yml` and
 `.github/workflows/supporter-announce.yml`. `uses` and `head_ref` use the same
@@ -72,7 +84,7 @@ string `tokenId`/`listingId`, `mintTxHash`, positive `verifiedBlock`,
 `confirmations >= 12`, `evidenceUrl` and `purchaseUrl`.
 
 `evidenceUrl` must be a public JSON release asset under
-`https://github.com/TheJollyLaMa/DecentPilgrimages/releases/download/v0.1.0/`.
+`https://github.com/TheJollyLaMa/DecentPilgrimages/releases/download/v0.1.1/`.
 The checkout route is the existing DecentHead
 `https://thejollylama.github.io/DecentHead/supporter/buy.html` with
 `chainId=8453`, the approved `escrow`, the **actual** `listingId`, and optionally
@@ -113,18 +125,18 @@ were closed and no new PR was opened.
 
 | Work | This version | Disposition / remaining gate |
 | --- | --- | --- |
-| #1 · standard Supporter workflows | Immutable callers, safe static root, About card and release boundary implemented | Keep open until parent publishes/prepares and steward verifies actual mint/listing; secrets/optional announcement/ENS remain gated. The issue's old repo-root hosting requirement is superseded by `site_root: public`. |
+| #1 · standard Supporter workflows | v0.1.0 prepared but remains unminted/superseded; v0.1.1 correction pending preparation | Steward verifies actual corrective mint/listing; optional announcement/ENS remain gated. The issue's old repo-root hosting requirement is superseded by `site_root: public`. |
 | #2 · version Base contracts | V1 source/ABI/client and local coverage retained and reproduced | Local implementation ready for review; do not close as deployed. Source verification, steward authorization, live deployment and historic obligations are deferred to a separately approved activation version. |
 | #3 · shared Head/onboarding/radio | Pinned shared components, accessible tutorial/About, optional GPS/radio and local records retained; Supporter card tested | Local experience acceptance reproduced. Live external service availability and real wallet/device acceptance remain release-steward checks, not claims of live reward readiness. |
 | #4 · steward payroll/helper | Disabled scaffold and validation retained | Defer activation to next authorized operations version: accepted work, reviewed accounts/assets/budgets, provider/origin review, service configuration and actual receipts. No setup equals payment. |
 | #5 · overseer/migration readiness | Local tests and explicit preview/support boundaries documented | Keep open: no blanket production/migration approval. Historic chain custody/obligations, independently verified deployed source, real-wallet browser acceptance and steward deployment/funding approval are outstanding. |
-| PR #6 · Base V1/onboarding | Reviewed at `7073388`, all existing tests reproduced; Supporter changes layered here | Parent integrates this branch with PR #6; no merge performed. No review approvals were present; existing GitHub validation checks were green at inspection. |
-| Remote `main` | `0b2ae6be822f4bc9ec8c2cacca37d56476653aac` is already an ancestor of PR #6 | Integrated without conflict or history rewrite. Dirty main checkout untouched. |
+| PR #6 · Base V1/onboarding | Reviewed at `7073388`, all existing tests reproduced; subsequently merged by parent | Latest main merge `5b9d499` is integrated into this corrective branch. No merge was performed by this worker. |
+| Remote `main` | PR #6 merge `5b9d499` is integrated into this corrective branch | Fast-forwarded without conflict or history rewrite. Dirty main checkout untouched. |
 | Remote `feat/base-v1-onboarding` | PR #6 head `7073388` | Source worktree inspected read-only; preserved. |
 | Dedicated `feat/supporter-release` | This worktree and new changes | Parent review/integration only; no force push, branch deletion, tag or release. |
 
-After a fresh `git fetch origin`, the latest `origin/main`
-`0b2ae6be822f4bc9ec8c2cacca37d56476653aac` and exact open PR #6 head
+After a fresh `git fetch origin`, latest `origin/main` merge `5b9d499`
+was fast-forwarded into this branch; it preserves exact PR #6 head
 `707338886626ca70eea916b864ab6e3a2797f8e3` were each confirmed as ancestors of
 this branch with `git merge-base --is-ancestor`. The supplemental changes do not
 replace those commits or change contract source, historical contracts/ABIs,
@@ -133,8 +145,9 @@ This branch can be integrated without dropping either upstream history; final
 merge sequencing remains the parent's responsibility. Recheck ancestry if
 either upstream branch moves.
 
-Only the two pre-existing remote branch heads above were present in the remote
-inspection. No unfinished implementation was copied from the dirty main checkout.
+Only main and feat/base-v1-onboarding existed at the original inspection; this
+worker added feat/supporter-release. No unfinished implementation was copied from
+the dirty main checkout.
 Gate V2 production wiring, video/knowledge services, token/NFT metadata publication,
 historic migration and financial changes are expressly deferred rather than
 silently treated as complete.
@@ -152,10 +165,15 @@ release. This is not a formal audit or deployed-source equivalence finding.
   identity, rejected signatures, wallet/network changes, absent deployment,
   unavailable provider/helper and exact decimals.
 - `npm run payroll:validate`: passed, disabled/empty/no payments.
-- `npm run test:browser`: **6 Chromium tests passed**. Existing map/basket,
+- `npm run test:browser`: **10 Chromium tests passed**. Existing map/basket,
   consent, export/recovery, declined location/tutorial checks plus receipt-free
   About at **320, 390 and 1024 px**, no horizontal overflow, no checkout links,
   no automatic network requests and Escape dismissal.
+  Corrective title cases at **1440, 390 and 320 px** assert exact
+  `Decent Pilgrimages` text, character-level word line integrity and viewport
+  bounds. A host-only font/word-wrap adapter leaves pinned vendor bytes intact.
+  The actual repository-root redirect is also tested with query/hash retention,
+  nested app assets and pending About support; no external calls occur.
 - Browser fixtures serve a private ephemeral loopback port and block external
   services; shared preview on port 8823 is untouched.
 - Dependencies were restored with `npm ci` only after `npm test` reported missing
@@ -172,7 +190,8 @@ Consulted Canopy `data/agency-map.json` Pilgrimages/Head offers and evidence; it
 legacy Pilgrimages snapshot is a lead, not current activation evidence.
 Adapted DecentHead workflow templates at
 `426ccb7ad8de658cda374b11ebc4b544b35257e6`, then pinned the parent-approved
-static-root-capable kit at `2b87543db1ff5c44c720e5c7f782386bbd702bc1`.
+static-root-capable kit at `2b87543db1ff5c44c720e5c7f782386bbd702bc1`, followed
+by corrective renderer kit `599241344849af1921f6a9a59431f4b2f300d417`.
 Rendering/pinning/verification remain shared, not copied. The receiving app's
 `public/` root is incompatible with the donor's former root-only assumption;
 `site_root` resolves that without exposing operational files.

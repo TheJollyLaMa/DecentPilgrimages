@@ -28,14 +28,22 @@ preserved static-distribution NOTICE/full license texts.
 It never sends transactions or treats a synthetically shaped receipt as live
 evidence. The browser card is not an independent chain verifier.
 
-`npm run test:browser` now passes six real Chromium tests: the existing three
+`npm run test:browser` now passes ten real Chromium tests: the existing three
 map/gate/tutorial cases and About Supporter availability at 320, 390 and 1024 px.
 The new cases confirm disabled purchase, no fabricated `href`, clear support
 limitations, no overflow, Escape dismissal and no external network requests.
 All browser servers use private ephemeral loopback ports; the shared preview
 on port 8823 is not stopped or modified.
+The v0.1.1 correction adds exact header-layout assertions at 1440, 390 and 320 px.
+Each character in `Decent` and `Pilgrimages` must stay on its word's line, with
+no clipping or viewport overflow. This catches the observed 320 px orphan `es`
+before the host-only responsive sizing fix, not just a matching text string.
+The legacy GitHub Pages-root fixture serves the actual root `index.html`, follows
+its navigation into the nested `public/` app, checks exact query/hash retention,
+then opens About and asserts v0.1.1 pending support, no checkout href and no
+external traffic. It does not expose operational source via the local server.
 
-Final local validation: 35 contract/offline tests, 44 UI tests and six browser
+Final local validation: 35 contract/offline tests, 44 UI tests and ten browser
 tests passed; disabled/empty payroll validation and source diff checks passed.
 YAML parsing and immutable caller `uses`/`head_ref` equality were checked.
 See [release scope and outstanding activation gates](Supporter-Release.md).

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Decent Pilgrimages</title>
+  <script>
+    const app = new URL('./public/', location.href);
+    app.search = location.search;
+    app.hash = location.hash;
+    location.replace(app.href);
+  </script>
+</head>
+<body>
+  <p>Opening <a href="./public/">Decent Pilgrimages</a>…</p>
+  <noscript><p>JavaScript is required by the app. Follow the link above to continue.</p></noscript>
+</body>
+</html>
