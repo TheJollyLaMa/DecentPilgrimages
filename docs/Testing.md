@@ -10,7 +10,7 @@ npm test
 
 `npm test` runs `test:contracts` (15 local-EVM contract tests and six offline
 Etherscan V2 verification regressions, plus 14 isolated V2 basket-escrow tests),
-followed by the 39 Node UI tests.
+followed by the 43 Node UI tests (including four Supporter regressions).
 Explicit Hardhat selectors prevent Node UI tests from also running inside Mocha.
 CI uses this same sequential command and validates the inactive payroll queue.
 Imported donor licenses and the Head README retain exact pinned upstream bytes.
@@ -18,6 +18,26 @@ Their existing whitespace is excluded from staged whitespace checks rather than
 rewriting third-party attribution; all application/source changes are checked.
 The vendored Leaflet distribution likewise retains npm package bytes (including
 upstream CRLF/whitespace), independently compared to installed Leaflet 1.9.4.
+
+## Supporter preview acceptance · 2026-11-05
+
+`test/ui/supporter.test.mjs` verifies the default receipt-free unavailable state,
+the reviewed-public-receipt/external-checkout gate, wrong-chain/price/edition/
+receipt rejection, hostile/duplicate URL rejection and immutable kit caller pins.
+It never sends transactions or treats a synthetically shaped receipt as live
+evidence. The browser card is not an independent chain verifier.
+
+`npm run test:browser` now passes six real Chromium tests: the existing three
+map/gate/tutorial cases and About Supporter availability at 320, 390 and 1024 px.
+The new cases confirm disabled purchase, no fabricated `href`, clear support
+limitations, no overflow, Escape dismissal and no external network requests.
+All browser servers use private ephemeral loopback ports; the shared preview
+on port 8823 is not stopped or modified.
+
+Final local validation: 35 contract/offline tests, 43 UI tests and six browser
+tests passed; disabled/empty payroll validation and source diff checks passed.
+YAML parsing and immutable caller `uses`/`head_ref` equality were checked.
+See [release scope and outstanding activation gates](Supporter-Release.md).
 
 `test/ui/core.test.mjs`: exact compiled/public/module ABI equality, configuration/
 wrong-chain/unavailable-RPC gates, integer decimals, BigNumber-to-string

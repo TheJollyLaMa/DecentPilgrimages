@@ -4,8 +4,10 @@ import { createPilgrimageClient } from './client.mjs';
 import { createRadioController } from './radio.mjs';
 import { createGeographicMap } from './map.mjs';
 import { createPinning } from './pinning.mjs';
+import { mountSupporterCard } from './supporter.mjs';
 
 const $ = id => document.getElementById(id);
+mountSupporterCard(document);
 const deployment = { ...configuredDeployment, tokens: configuredDeployment.tokens.map(token => ({ ...token })) };
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let journal = emptyJournal(), localStorageAvailable = true, places = [...fixtures], selected = places[0], location = null;

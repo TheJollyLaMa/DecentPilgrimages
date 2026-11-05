@@ -22,8 +22,8 @@ No external model, deployed-chain, radio or payment calls are made by these
 tests. Contract tests use a local EVM; helper/receipt/wallet/radio tests use
 fixtures and loopback servers.
 `npm test` runs the explicit contract/verification selectors and then the UI
-runner once: 35 local-EVM/offline verification tests and 39 UI tests.
-`test:browser` adds three real Chromium map/gate/arrival/tutorial tests; install
+runner once: 35 local-EVM/offline verification tests and 43 UI tests.
+`test:browser` adds six real Chromium map/gate/arrival/tutorial/About tests; install
 its browser once with `npx playwright install chromium` if unavailable.
 
 ## Available now
@@ -85,6 +85,28 @@ prototype with sponsor-created gates, participant allowlists, two collection
 modes, signed video/knowledge attestations and expiry refunds. It is not wired
 to the existing V1 transaction desk or production deploy/verify scripts. No NFT
 is minted; metadata/NFT reuse recommendations are in the geographic-gates guide.
+
+## Versioned Supporter edition · preparing
+
+The proposed **v0.1.0** Supporter edition is optional development support:
+**1,000 editions at 10 USDC (`10000000`) on Base**, using the existing
+NFT `0xe63EC9f8228720bAAC2fD528C0A6d06B3Dc5439B` and community escrow
+`0x31b07b83e99A9bdF379bf40225b8A80d3804C89d`.
+The About card stays **preparing/unavailable** until a steward-reviewed, verified
+public mint/listing receipt is configured. No token or listing is fabricated.
+Any enabled purchase link uses the existing external DecentHead checkout; this
+app adds no purchase-signing logic.
+
+Support does **not** prove health, financial functionality, deployment safety,
+returns or future delivery. It is not a reward allocation or contributor payment.
+Base V1, payroll and helper activation remain separately gated.
+
+The standard caller workflows pin DecentHead
+`2b87543db1ff5c44c720e5c7f782386bbd702bc1`, render/pin only `public/` as the
+runnable site (no build), and archive the exact tagged source. Preparation needs
+the missing repository `PINATA_JWT` secret. Announcements remain disabled unless
+explicitly enabled/configured; no ENS change is authorized by this work.
+See [Supporter release scope, evidence and all issue/PR/branch dispositions](docs/Supporter-Release.md).
 
 ## Logical public team jobs
 

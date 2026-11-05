@@ -126,3 +126,27 @@ test("map tutorial and About remain usable; denied GPS never enables a visit", a
     assert.equal(await page.locator("#tour-dialog").isVisible(), false);
     assert.deepEqual(errors, []);
 });
+
+for (const width of [320, 390, 1024]) {
+    test(`About Supporter edition stays unavailable without a receipt at ${width}px`, async t => {
+        const { page, requests, errors } = await fixture(t, { viewport: { width, height: 844 } });
+        await page.locator("decent-header app-title button").click();
+        const about = page.locator("#about-dialog");
+        await about.waitFor({ state: "visible" });
+        await page.locator("#supporter-title").scrollIntoViewIfNeeded();
+        assert.match(await about.innerText(), /1,000 editions, 10 USDC/);
+        assert.match(await page.locator("#supporter-status").innerText(), /No verified mint receipt or listing/);
+        assert.equal(await page.locator("#supporter-preparing").isDisabled(), true);
+        for (const id of ["supporter-checkout", "supporter-evidence"]) {
+            assert.equal(await page.locator(`#${id}`).isVisible(), false);
+            assert.equal(await page.locator(`#${id}`).getAttribute("href"), null);
+        }
+        assert.match(await about.innerText(), /not a travel reward or proof of health, financial functionality/);
+        const dimensions = await about.evaluate(node => ({ client: node.clientWidth, scroll: node.scrollWidth }));
+        assert.ok(dimensions.scroll <= dimensions.client, JSON.stringify(dimensions));
+        await page.keyboard.press("Escape");
+        assert.equal(await about.isVisible(), false);
+        assert.deepEqual(requests, [], "About must not fetch wallets, checkout, RPC or receipt services");
+        assert.deepEqual(errors, []);
+    });
+}

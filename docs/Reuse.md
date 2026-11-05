@@ -73,3 +73,11 @@ not copied. Adapt its extensible metadata convention later; reject product
 mint ownership as an escrow/visit entitlement. The [geographic-gates guide](Geographic-Gates.md)
 records exact inspected surfaces, incompatibilities, the proposed optional NFT
 receipt and unimplemented verifier/production activation boundaries.
+# Versioned Supporter edition
+
+The [Supporter release review](Supporter-Release.md#reuse-decision) records the
+receiving need, exact DecentHead donor/template and final shared-kit pins, safe
+`public/` hosting adaptation, unavailable BigNuten prior-art search scope and
+receiving-app tests. Workflow implementation remains shared in DecentHead; the
+About card adds no payment signer and stays unavailable without reviewed public
+receipt evidence.
