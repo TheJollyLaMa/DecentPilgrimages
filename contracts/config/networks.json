@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": "DecentPilgrimageBaseV1",
+  "chains": {
+    "base": {
+      "chainId": 8453,
+      "chainName": "Base",
+      "explorerUrl": "https://basescan.org"
+    },
+    "baseSepolia": {
+      "chainId": 84532,
+      "chainName": "Base Sepolia",
+      "explorerUrl": "https://sepolia.basescan.org"
+    }
+  }
+}

@@ -1,177 +1,146 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DecentPilgrimages</title>
-
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-  />
-
-  <!-- Custom Styles -->
-  <link rel="stylesheet" href="./styles/base.css" />
-  <link rel="stylesheet" href="./styles/loader.css" />
-  <link rel="stylesheet" href="./styles/header.css" />
-  <link rel="stylesheet" href="./styles/map.css" />
-  <link rel="stylesheet" href="./styles/info-panel.css" />
-  <link rel="stylesheet" href="./styles/admin-panel.css" />
-  <link rel="stylesheet" href="./styles/animations.css" />
-  <!-- Favicon -->
-  <link rel="icon" href="./assets/MandelBlum.png" type="image/jpeg" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Follow a meaningful trail. Participate freely, keep your location private, and discover organizer-approved pilgrimages on Base.">
+  <meta name="color-scheme" content="dark">
+  <title>DecentPilgrimages · A trail worth taking</title>
+  <link rel="stylesheet" href="./styles/trail.css">
+  <link rel="stylesheet" href="./vendor/leaflet/1.9.4/leaflet.css">
+  <script src="./vendor/leaflet/1.9.4/leaflet.js"></script>
+  <script type="module" src="./scripts/v1/app.mjs"></script>
 </head>
 <body>
-  <!-- Loader -->
-  <div id="loader" class="loader">
-    <div class="spinner"></div>
-    <div class="loader-text">Loading...</div>
-  </div>
-
-  <!-- Header -->
-  <header id="app-header">
-    <img src="./assets/SecretPyramid.png" alt="DecentAgency Logo" class="header-logo" />
-    <h1 id="pilgrimage-name">DecentPilgrimages</h1> <!-- Pilgrimage name will load dynamically -->
-    <nav>
-      <button id="request-access-button">Request Access</button>
-      <button id="wallet-connect-button">
-        <img src="./assets/Metamask_Logo.png" alt="MetaMask" class="wallet-logo" />
-        Connect Wallet
-      </button>
-    </nav>
-    <div id="latlong-display" style="position: fixed; top: 10px; right: 10px; background: rgba(255,255,255,0.8); padding: 5px; border-radius: 4px;"></div>
-  </header>
-
-  <!-- Main Section -->
-  <main>
-    <!-- Map Container -->
-    <section id="map-container">
-      <div id="map"></div>
+  <a class="skip" href="#trail">Skip to the trail</a>
+  <decent-header></decent-header>
+  <main id="trail">
+    <section class="hero" aria-labelledby="welcome">
+      <div class="eyebrow">SPONSOR A JOURNEY · LEAVE SOMETHING GOOD</div>
+      <h1 id="welcome">A trail worth<br><em>taking together.</em></h1>
+      <p>Pin a little encouragement at the end of a walk. Sponsor a museum visit.
+        Leave a token basket at a place worth reaching. Give someone a good reason to go.</p>
+      <div class="actions"><button id="start-tour" class="primary">Follow the bunny <span aria-hidden="true">↗</span></button>
+        <button id="open-help">How this works</button></div>
+      <div class="trail-facts"><span>◎ No location tracking</span><span>☥ Organizer-reviewed rewards</span><span>◇ Your data, your choice</span></div>
+      <div class="hero-art" aria-hidden="true"><span class="sun"></span><span class="ridge ridge-one"></span><span class="ridge ridge-two"></span><span class="trail-line"></span><span class="bunny">🐇</span></div>
     </section>
-
-    <!-- Info Panel -->
-    <section id="info-panel" class="hidden">
-      <video id="info-video" class="background-video" autoplay muted loop>
-        <source src="./assets/blue_sprite.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-      <div id="info-content">
-        <p>Welcome to DecentPilgrimages! Click a marker to explore.</p>
-        <div id="token-logos">
-          <div class="token-container">
-            <a href="https://www.mintme.com/token/DecentSmartHomes" target="_blank">
-              <img src="./assets/DecentSmartHome_Logo.png" alt="Decent Smart Home" />
-            </a>
-            <div class="token-count">0</div>
-          </div>
-          <div class="token-container">
-            <a href="https://www.mintme.com/token/bobdubbloon" target="_blank">
-              <img src="./assets/BobCat_Logo.png" alt="BobCat" />
-            </a>
-            <div class="token-count">0</div>
-          </div>
-          <div class="token-container">
-            <a href="https://www.mintme.com/token/DooBetter" target="_blank">
-              <img src="./assets/DooBetter_Logo.png" alt="DooBetter" />
-            </a>
-            <div class="token-count">0</div>
-          </div>
-        </div>
-        <!-- Timeline for Collection Events -->
-        <div id="collection-timeline"></div>
+    <section class="deployment panel" aria-labelledby="deployment-title">
+      <div><span class="eyebrow">HONEST BY DEFAULT</span><h2 id="deployment-title">Explore now. Transact only when ready.</h2>
+        <p id="deployment-state" role="status">Deployment unconfigured. These demonstration trails have no rewards.</p></div>
+      <button id="refresh-chain" disabled>Read Base deployment</button>
+    </section>
+    <section class="trail-layout" aria-label="Trail explorer">
+      <div class="map-panel panel">
+        <div class="section-heading"><div><span class="eyebrow">CHOOSE YOUR NEXT STEP</span><h2>Pilgrimage map</h2></div><span class="tag" id="map-mode">Demo stops · real coordinates</span></div>
+        <p class="muted">Pan, zoom and select a pin. Circles show geographic gates in meters. Click the map to position a local draft, or type exact coordinates below.</p>
+        <label class="check"><input id="map-tiles" type="checkbox"> Show OpenStreetMap streets (external tiles; shares your IP and viewed area)</label>
+        <div class="map" id="map" role="region" aria-label="Geographic pilgrimage map"></div>
+        <p id="map-status" role="status">Street basemap off. Pins and gate circles work locally. No map provider contacted until you choose.</p>
+        <div class="geo-box" id="geo-area"><div><h3>Find your bearings, privately</h3><p>Optional location stays in this page. A fresh, accurate fix can open a visit check; it never transfers tokens by itself.</p></div>
+          <button id="request-location">Use my location once</button><button id="clear-location" hidden>Clear location</button></div>
+        <p id="geo-status" role="status">Location not requested.</p>
       </div>
+      <aside class="panel trail-detail" id="detail" aria-labelledby="detail-title">
+        <span class="eyebrow" id="detail-kind">DEMONSTRATION · NO PAYMENT</span>
+        <h2 id="detail-title">Choose a trail</h2><p id="detail-mission"></p>
+        <dl id="detail-meta"></dl>
+        <div class="actions"><button id="save-trail">Save locally</button><button id="claim-reward" class="primary" disabled>Claim approved reward</button></div>
+        <p id="claim-status" role="status">Connect only if you want to check a configured on-chain approval. Browser location is not eligibility.</p>
+        <label id="claim-token-label" hidden>Reward token<select id="claim-token"></select></label>
+        <button id="check-claim" disabled>Check organizer approval</button>
+      </aside>
     </section>
-
-
-    <!-- Admin Panel -->
-    <section id="admin-panel" class="hidden">
-      <h2>Admin Console</h2>
-      <div id="admin-controls">
-        <!-- Whitelist Participant -->
-        <div class="admin-section">
-          <h3>Whitelist Participant</h3>
-          <label for="whitelist-participant">Wallet Address:</label>
-          <input id="whitelist-participant" type="text" placeholder="Wallet Address" />
-          <button id="whitelist-participant-button">Whitelist</button>
-        </div>
-    
-        <!-- Whitelist Sponsor -->
-        <div class="admin-section">
-          <h3>Whitelist Sponsor</h3>
-          <label for="whitelist-sponsor">Wallet Address:</label>
-          <input id="whitelist-sponsor" type="text" placeholder="Wallet Address" />
-          <button id="whitelist-sponsor-button">Whitelist</button>
-        </div>
-    
-        <!-- Add Sponsor Tokens -->
-        <div class="admin-section">
-          <h3>Add Sponsor Tokens</h3>
-          <label for="sponsor-token-address">Token Address:</label>
-          <input id="sponsor-token-address" type="text" placeholder="Token Address" />
-          <label for="sponsor-token-amount">Amount:</label>
-          <input id="sponsor-token-amount" type="number" placeholder="Amount" />
-          <button id="add-sponsor-tokens-button">Add Tokens</button>
-        </div>
-    
-        <!-- Add Location -->
-        <div class="admin-section">
-          <h3>Add Location</h3>
-          <label for="location-name">Location Name:</label>
-          <input id="location-name" type="text" placeholder="Location Name" />
-          <label for="location-lat">Latitude (decimal):</label>
-          <input id="location-lat" type="text" placeholder="Latitude" />
-          <label for="location-lng">Longitude (decimal):</label>
-          <input id="location-lng" type="text" placeholder="Longitude" />
-          <label for="location-radius">Radius (meters):</label>
-          <input id="location-radius" type="number" placeholder="Radius" />
-          <label for="location-mission">Mission:</label>
-          <input id="location-mission" type="text" placeholder="Mission" />
-          <label for="location-token-address">Token Address:</label>
-          <input id="location-token-address" type="text" placeholder="Token Address" />
-          <label for="location-token-amount">Token Amount:</label>
-          <input id="location-token-amount" type="number" placeholder="Amount" />
-          <button id="add-location-button">Add Location</button>
-        </div>
-    
-        <!-- Remove Location -->
-        <div class="admin-section">
-          <h3>Remove Location</h3>
-          <label for="remove-location-id">Location ID:</label>
-          <input id="remove-location-id" type="number" placeholder="Location ID" />
-          <button id="remove-location-button">Remove Location</button>
-        </div>
-    
-        <!-- Withdraw Tokens -->
-        <div class="admin-section">
-          <h3>Withdraw Tokens</h3>
-          <label for="withdraw-token-address">Token Address:</label>
-          <input id="withdraw-token-address" type="text" placeholder="Token Address" />
-          <label for="withdraw-token-amount">Amount:</label>
-          <input id="withdraw-token-amount" type="number" placeholder="Amount" />
-          <button id="withdraw-tokens-button">Withdraw Tokens</button>
-        </div>
-      </div>
+    <section class="panel pinning-panel" aria-labelledby="pin-title">
+      <span class="eyebrow">NEXT-LEVEL GATES · LOCAL DESIGN STUDIO</span><h2 id="pin-title">Give someone a reason to go.</h2>
+      <p>A short walk. A museum exhibit. A community garden. Design a funded stop for one traveler or a small group. These drafts are <strong>unfunded and unminted</strong>; no live V2 contract or visit service is connected.</p>
+      <form id="pin-form"><fieldset>
+        <legend>Place a token gate</legend>
+        <div class="input-row"><label>Stop name<input name="name" required maxlength="100" placeholder="A walk to the community garden"></label><label>Purpose<textarea name="description" required maxlength="1000" rows="2" placeholder="A little encouragement to get outside and notice something growing."></textarea></label></div>
+        <div class="input-row"><label>Latitude<input name="latitude" required placeholder="43.000000"></label><label>Longitude<input name="longitude" required placeholder="-76.000000"></label><label>Gate radius, meters<input name="radius" type="number" min="5" max="10000" value="30" required></label></div>
+        <button id="pin-at-location" type="button">Position at my fresh GPS fix</button>
+        <div class="input-row"><label>Collection mode<select name="mode"><option value="per-participant">One fixed basket per participant</option><option value="first-collector">First eligible visitor takes the basket</option></select></label><label>Visit check<select name="verification"><option value="video">Video check-in with verifier</option><option value="knowledge">Private local-knowledge test</option></select></label></div>
+        <label>What should the visitor observe or discuss? (public, no private answers)<input name="prompt" required maxlength="500" placeholder="Tell the host one thing you noticed in the new exhibit."></label>
+        <div class="input-row"><label>Whitelisted participant wallets (commas or spaces)<textarea name="participants" required maxlength="4300" rows="2" placeholder="0x..."></textarea></label><label>Visit verifier wallet<input name="verifier" required pattern="0x[a-fA-F0-9]{40}" maxlength="42"></label></div>
+        <div class="input-row"><label>Asset contract (zero address = native ETH)<input name="token" required value="0x0000000000000000000000000000000000000000" pattern="0x[a-fA-F0-9]{40}" maxlength="42"></label><label>Label<input name="symbol" value="ETH" required maxlength="12"></label><label>Decimals<input name="decimals" type="number" min="0" max="36" value="18" required></label><label>Amount per basket<input name="amount" required inputmode="decimal" placeholder="0.001"></label></div>
+        <label>Collection deadline (your local time)<input name="expiresAt" required type="datetime-local"></label>
+        <label class="check"><input name="consent" type="checkbox" required> I have permission for this stop. I understand published gate coordinates and wallet allowlists are public. No private driveway, private home details, meeting links or test answers belong in metadata.</label>
+        <div class="actions"><button type="submit" class="primary">Review gate & required funding</button><button id="export-gate" type="button" disabled>Export exact metadata draft</button><label class="file-button">Recover gate draft<input id="import-gate" type="file" accept=".json,application/json"></label></div>
+      </fieldset></form>
+      <p id="pin-status" role="status">Choose coordinates on the map or enter them. Nothing is saved automatically.</p><pre id="gate-review" aria-label="Reviewed gate metadata and funding"></pre>
+      <h3>Arrive → verify the visit → collect</h3>
+      <p id="arrival-state" role="status">Review a draft and request a fresh GPS fix to rehearse the gate. Location stays in this page.</p>
+      <div class="actions"><button id="visit-video" disabled>Request video check-in</button><button id="visit-knowledge" disabled>Request local-knowledge test</button></div>
+      <p id="visit-result" role="status"></p>
     </section>
-
-    
+    <section class="panel" aria-labelledby="trails-title"><div class="section-heading"><h2 id="trails-title">Places with purpose</h2><span class="muted">Keyboard-friendly trail list</span></div><div class="trail-cards" id="trail-list"></div></section>
+    <section class="next-steps">
+      <article class="panel"><span class="eyebrow">MAKE IT MEANINGFUL</span><h2>Your work matters.</h2><p>Participation is free. A mission, patch, or field report is not a promise of payment.
+        Agree on acceptance evidence with the steward first; register payout details privately only when asked.</p><a href="https://github.com/TheJollyLaMa/DecentPilgrimages/issues/3">Experience team · issue #3 ↗</a></article>
+      <article class="panel radio-panel"><span class="eyebrow">A LITTLE COMPANY</span><h2>DBuskRadio</h2><p>Optional music from A-Decent-Agency. Loading connects to its public widget and service. Playback is always your choice.</p><button id="load-radio">Load radio (external service)</button><button id="stop-radio" hidden>Unload radio</button><div id="radio-widget" aria-live="polite"></div></article>
+      <article class="panel"><span class="eyebrow">HELP, NOT AUTHORITY</span><h2>Ask the trail helper</h2><p>The optional assistant is disabled until its server is configured. It cannot approve claims, authorize payroll, or see your wallet or location.</p><button id="open-assistant">Open helper</button></article>
+    </section>
+    <footer><span>☥ DecentPilgrimages · Base V1</span><a href="https://github.com/TheJollyLaMa/DecentPilgrimages/issues/5">Integration & stewardship · #5</a><a href="https://github.com/TheJollyLaMa/DecentPilgrimages">Source & provenance</a><button id="open-profile">My local profile</button></footer>
   </main>
-
-  <!-- Footer -->
-  <footer id="app-footer">
-    <p>&copy; 2025 DecentPilgrimages. Powered by <b>DecentAgency</b>.</p>
-  </footer>
-
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-
-  <!-- ethers.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
-
-  <!-- App Scripts -->
-  <script type="module" src="./scripts/wallet.js"></script>
-  <script type="module" src="./scripts/landmarks.js"></script>
-  <script type="module" src="./scripts/contract.js"></script>
-  <script type="module" src="./scripts/main.js"></script>
+  <dialog id="about-dialog" class="pilgrimage-about" aria-labelledby="about-title">
+    <svg class="temple-backdrop" viewBox="0 0 640 540" aria-hidden="true" focusable="false">
+      <path d="M50 180 320 35l270 145ZM85 205h470M100 455h440M65 485h510M30 520h580" />
+      <path d="M135 225v210m90-210v210m190-210v210m90-210v210" stroke-width="32" />
+      <circle cx="320" cy="135" r="22" />
+    </svg>
+    <button class="close" data-close aria-label="Close about">×</button>
+    <div class="about-content">
+      <span class="eyebrow">DECENT PILGRIMAGES</span>
+      <h2 id="about-title">A little support.<br>A meaningful journey.</h2>
+      <p class="about-intro">Sponsor someone's travels. Leave tokens at places of pilgrimage along their way.</p>
+      <ol class="journey-flow" aria-label="How a pilgrimage works">
+        <li><span class="journey-icon" aria-hidden="true">♡</span><h3>Sponsor</h3><p>Back a traveler.</p></li>
+        <li><span class="journey-icon" aria-hidden="true">⌖</span><h3>Place</h3><p>Tokens at meaningful stops.</p></li>
+        <li><span class="journey-icon" aria-hidden="true">☥</span><h3>Pilgrimage</h3><p>Travel. Visit. Collect.</p></li>
+      </ol>
+      <div class="actions about-actions"><button id="about-tour" class="primary">Follow the bunny 🐇</button><button id="about-help">How to take part</button></div>
+      <section class="supporter-card" aria-labelledby="supporter-title">
+        <h3 id="supporter-title">Support this journey · v0.1.0</h3>
+        <p>A dated Supporter edition helps sustain development: 1,000 editions, 10 USDC each on Base, through the community escrow.</p>
+        <p id="supporter-status" role="status">Preparing · No verified mint receipt or listing is published. Purchasing is unavailable.</p>
+        <div class="actions">
+          <button id="supporter-preparing" disabled>Supporter edition preparing</button>
+          <a id="supporter-checkout" hidden target="_blank" rel="noopener noreferrer">Open DecentHead checkout ↗</a>
+          <a id="supporter-evidence" hidden target="_blank" rel="noopener noreferrer">Verified public receipt ↗</a>
+        </div>
+        <p>Optional support, not a travel reward or proof of health, financial functionality, deployment safety, returns or future delivery. Participation stays free.</p>
+      </section>
+      <nav class="about-links" aria-label="Pilgrimage links"><a href="https://github.com/TheJollyLaMa/DecentPilgrimages">Project</a><a href="https://github.com/TheJollyLaMa/DecentPilgrimages/blob/main/wiki/Development-Payroll.md">Build with us</a><a href="https://polygonscan.com/address/0x8FD1A345F65D27a3c360933e38CC653E0dE37CC1">Original Polygon journey</a><a href="./NOTICE">License &amp; credits</a></nav>
+      <p class="about-footnote">Preview only · No live Base rewards. Real collections need funding and organizer approval; GPS alone unlocks nothing.</p>
+    </div>
+  </dialog>
+  <dialog id="help-dialog" aria-labelledby="help-title"><button class="close" data-close aria-label="Close help">×</button><span class="eyebrow">THE SHORT PATH</span><h2 id="help-title">Show up. Do good. Keep agency.</h2>
+    <ol class="steps"><li><strong>Explore freely.</strong> Demo trails work without a wallet. Verify real-world access and safety yourself.</li><li><strong>Agree on the mission.</strong> Ask an organizer what evidence they accept. Send any registration or sensitive evidence privately through an agreed channel; this app has no public registration form.</li><li><strong>Organizer review comes first.</strong> Only the deployed contract’s owner can approve a particular wallet, location, token and amount. GPS, tutorials, saved trails and issue assignments do not create eligibility.</li><li><strong>Check, then claim.</strong> Base configuration, sponsor funds, allocation and your exact on-chain approval must exist. A submitted transaction is not a paid claim; wait for its successful receipt.</li></ol>
+    <h3>Development work & payroll</h3><p>Link acceptance evidence in the agreed public issue, omitting private data. A maintainer-approved bounty label and private registration are prerequisites, not guarantees. The empty payroll pipeline remains steward-disabled. Only verified canonical Base <code>PayrollPaid</code> receipts settle queue entries.</p>
+    <h3>Organizer lifecycle & unused funds</h3><p>The left ankh requires verified on-chain owner permission. Pause a location to prevent new claims, cancel pending approvals individually, then release unused allocation only when no approvals remain for that location/asset. Recover only unallocated funds to an explicitly reviewed recipient; recovery is not a participant reward and never triggers claim celebration. Even the owner must explicitly allowlist their own address before sponsor funding. The IPFS header accurately reports unconfigured, local files only; no provider credentials, uploads or community pin actions are offered.</p>
+    <p><a href="https://github.com/TheJollyLaMa/DecentPilgrimages/issues/2">Contracts · #2</a> · <a href="https://github.com/TheJollyLaMa/DecentPilgrimages/issues/3">Experience · #3</a> · <a href="https://github.com/TheJollyLaMa/DecentPilgrimages/issues/4">Payroll & helper · #4</a> · <a href="https://github.com/TheJollyLaMa/DecentPilgrimages/issues/5">Steward · #5</a></p><button id="help-tour" class="primary">Walk through with the bunny</button>
+  </dialog>
+  <dialog id="profile-dialog" aria-labelledby="profile-title"><button class="close" data-close aria-label="Close profile">×</button><span class="eyebrow">RIGHT ANKH · YOUR OWN SPACE</span><h2 id="profile-title">My local trail journal</h2><p>This journal lives only in your browser. It contains no GPS, wallet credentials or reward eligibility. Exports may contain your chosen nickname; review before sharing.</p>
+    <form id="profile-form"><label>Trail nickname (optional)<input id="nickname" maxlength="60" autocomplete="off"></label><button type="submit">Save nickname</button></form><p id="profile-state" role="status"></p><div class="actions"><button id="export-profile">Export local journal</button><label class="file-button">Recover journal<input id="import-profile" type="file" accept=".json,application/json"></label><button id="clear-profile">Forget local journal</button></div><p>Recovery accepts only this app’s versioned, bounded journal format. It cannot restore a wallet or authorize a payout. No automatic IPFS upload. Use the shared IPFS controls only for an explicit host backup action.</p>
+  </dialog>
+  <dialog id="organizer-dialog" aria-labelledby="organizer-title"><button class="close" data-close aria-label="Close organizer">×</button><span class="eyebrow">LEFT ANKH · AUTHORIZED ACTIONS</span><h2 id="organizer-title">Organizer & sponsor desk</h2><p id="organizer-state" role="status">Connect a wallet and explicitly read a configured Base deployment. No permission is inferred from this menu.</p>
+    <p class="muted">The contract owner organizes and allowlists sponsors. All writes require wallet confirmation, correct Base chain and successful receipts. Native ETH uses 18 decimals and needs no token allowance; USDC and other ERC20s use their individually verified decimals and a separate exact allowance.</p>
+    <form id="token-form"><h3>Add USDC or another ERC20 to this desk</h3><label>Actual Base ERC20 contract address<input name="address" required pattern="0x[a-fA-F0-9]{40}" maxlength="42"></label><label>Short display label (address is the identity)<input name="symbol" required pattern="[A-Za-z0-9_-]{1,12}" maxlength="12" placeholder="USDC"></label><p>No USDC address is guessed. This explicit read verifies code and on-chain decimals, then adds the token only to this page. It is not an endorsement, funding or reward approval.</p><button id="inspect-token" type="submit" disabled>Inspect token on Base</button></form>
+    <form id="sponsor-form"><h3>Sponsor an approved trail</h3><label>Configured reward token<select id="sponsor-token"></select></label><label>Exact token amount<input name="amount" inputmode="decimal" required maxlength="100" placeholder="0.00"></label><div class="actions"><button type="submit" data-action="approve-token" disabled>Approve token allowance</button><button type="submit" data-action="fund" disabled>Fund pilgrimage</button></div></form>
+    <div id="owner-controls">
+      <p>Owner status alone does not allow funding. To sponsor from the owner wallet, explicitly allowlist that same address below and reread the deployment after its confirmed receipt.</p>
+      <form id="allowlist-form"><h3>Owner: sponsor allowlist</h3><label>Sponsor wallet<input name="wallet" required pattern="0x[a-fA-F0-9]{40}" maxlength="42"></label><label class="check"><input name="approved" type="checkbox" checked> Allow sponsor funding</label><button type="submit" data-owner disabled>Save sponsor permission</button></form>
+      <form id="location-form"><h3>Owner: add a location</h3><label>Location name<input name="name" required maxlength="100"></label><div class="input-row"><label>Latitude<input name="latitude" required inputmode="decimal" placeholder="-90 to 90"></label><label>Longitude<input name="longitude" required inputmode="decimal" placeholder="-180 to 180"></label></div><label>Advisory radius (meters)<input name="radius" required type="number" min="1" max="100000" step="1" value="200"></label><label>Mission & acceptance instructions<textarea name="mission" required maxlength="2000" rows="3"></textarea></label><p>These are public trail coordinates, not a participant’s private location. Never paste private evidence.</p><button type="submit" data-owner disabled>Add public location</button></form>
+      <form id="allocation-form"><h3>Owner: allocate sponsored funds</h3><label>On-chain location ID<input name="location" required type="number" min="0" step="1"></label><label>Configured token<select name="token" class="token-select"></select></label><label>Exact token amount<input name="amount" inputmode="decimal" required maxlength="100"></label><button type="submit" data-owner disabled>Add allocation</button></form>
+      <form id="approval-form"><h3>Owner: approve a reviewed participant</h3><label>On-chain location ID<input name="location" required type="number" min="0" step="1"></label><label>Participant wallet<input name="wallet" required pattern="0x[a-fA-F0-9]{40}" maxlength="42"></label><label>Configured token<select name="token" class="token-select"></select></label><label>Exact approved token amount<input name="amount" inputmode="decimal" required maxlength="100"></label><p>Approve only after private registration and evidence review. Location permission never approves a claim.</p><div class="actions"><button type="submit" data-action="approve-claim" data-owner disabled>Approve exact claim</button><button type="submit" data-action="cancel-claim" data-owner disabled>Cancel approval</button></div></form>
+      <form id="location-status-form"><h3>Owner: pause or reactivate a location</h3><label>On-chain location ID<input name="location" required type="number" min="0" step="1"></label><label class="check"><input name="active" type="checkbox"> Location active (unchecked deactivates)</label><p>Deactivation prevents claims and new allocations; it does not cancel existing approvals or release funds. Review and cancel approvals separately.</p><button type="submit" data-owner disabled>Confirm location status</button></form>
+      <form id="release-form"><h3>Owner: release unused allocation</h3><label>On-chain location ID<input name="location" required type="number" min="0" step="1"></label><label>Asset<select name="token" class="token-select"></select></label><label>Exact amount to release<input name="amount" inputmode="decimal" required maxlength="100"></label><p>First cancel every pending approval for this location/asset. The contract refuses release while any approval remains. Release returns unused allocation to unallocated contract funds; it is not a wallet payment.</p><button type="submit" data-owner disabled>Release unused allocation</button></form>
+      <form id="recover-form"><h3>Owner: recover unallocated funds</h3><label>Asset<select name="token" class="token-select"></select></label><label>Exact amount to recover<input name="amount" inputmode="decimal" required maxlength="100"></label><label>Explicit recipient wallet<input name="recipient" required pattern="0x[a-fA-F0-9]{40}" maxlength="42"></label><label class="check"><input name="reviewed" type="checkbox" required> I reviewed this recipient and exact amount. This wallet-confirmed recovery sends unallocated funds; it is not a participant reward.</label><p>Allocated funds cannot be recovered. Cancel approvals and release unused allocations first where needed. ETH uses wei precision; ERC20 decimals are verified individually.</p><button type="submit" data-owner disabled>Recover to reviewed recipient</button></form>
+    </div><p id="write-status" role="status"></p>
+  </dialog>
+  <dialog id="assistant-dialog" aria-labelledby="assistant-title"><button class="close" data-close aria-label="Close helper">×</button><span class="eyebrow">OPTIONAL · SERVER-SIDE ONLY</span><h2 id="assistant-title">Trail helper</h2><p id="assistant-state">Helper disabled — no endpoint configured. No request has been sent.</p><form id="assistant-form"><label>Your question (max 1,200 characters)<textarea id="assistant-question" maxlength="1200" rows="4" required></textarea></label><label class="check"><input id="assistant-consent" type="checkbox"> For this message only, send the question I typed to the configured helper and model provider. No journal, wallet or location is attached. Do not include secrets or private evidence.</label><button id="send-assistant" type="submit" disabled>Send this message</button></form><p id="assistant-answer" role="status"></p></dialog>
+  <dialog id="tour-dialog" aria-labelledby="tour-title"><button class="close" data-close aria-label="End tutorial">×</button><div class="tour-bunny" aria-hidden="true">🐇</div><span class="eyebrow" id="tour-progress"></span><h2 id="tour-title"></h2><p id="tour-text"></p><div class="actions"><button id="tour-back">Back</button><button id="tour-next" class="primary">Next hop</button></div><p class="muted">Keyboard: Tab between controls, Escape to stop. No wallet or location requests.</p></dialog>
+  <div id="notice" role="status" aria-live="polite"></div>
+  <div id="celebration" aria-hidden="true" hidden>✦ ☥ ✦</div>
 </body>
 </html>

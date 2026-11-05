@@ -1,0 +1,10 @@
+{
+  "chainId": 8453,
+  "rpcUrl": null,
+  "rpcFallbackUrls": [],
+  "routerAddress": null,
+  "fundSlug": null,
+  "assets": {},
+  "legacy": {},
+  "blockedPayoutAddresses": []
+}
