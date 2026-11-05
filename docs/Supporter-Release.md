@@ -1,6 +1,10 @@
 # v0.1.0 · sponsored-journey preview Supporter edition
 
 Release-readiness review: 2026-11-05. Recommended tag: **v0.1.0** (not created).
+Parent plans a **non-prerelease** GitHub release named **v0.1.0 ·
+sponsored-journey preview**. That release flag is a publication choice, not
+production maturity or approval to activate financial functionality.
+The exact release-notes body is [docs/releases/v0.1.0.md](releases/v0.1.0.md).
 This is a versioned development-support artifact, **not an activated Base reward
 service**. A Supporter purchase does not prove health, financial functionality,
 deployment safety, profitability, a contributor entitlement or future delivery.
@@ -88,8 +92,10 @@ receipt without rewriting the tag.
 
 1. Parent/release steward reviews this branch and PR #6; neither is merged here.
    The release must include these workflows and use the exact reviewed commit.
-2. Set repository **secret `PINATA_JWT`** through GitHub settings. It is currently
-   missing; no secret was read, copied or published.
+2. The user has configured repository **secret `PINATA_JWT`** and the parent
+   verified its name through GitHub. It is no longer a configuration blocker.
+   No secret value was read, copied or published. Preparation/pinning still must
+   execute successfully before an actual mint can be prepared.
 3. Keep `SUPPORTER_DISCORD_ENABLED` unset/false. Only if announcements are approved,
    configure `DISCORD_SUPPORTER_WEBHOOK` privately, then enable that variable.
    `SUPPORTER_ENS_NAME` is optional and requires separate steward authorization;
@@ -116,6 +122,16 @@ were closed and no new PR was opened.
 | Remote `main` | `0b2ae6be822f4bc9ec8c2cacca37d56476653aac` is already an ancestor of PR #6 | Integrated without conflict or history rewrite. Dirty main checkout untouched. |
 | Remote `feat/base-v1-onboarding` | PR #6 head `7073388` | Source worktree inspected read-only; preserved. |
 | Dedicated `feat/supporter-release` | This worktree and new changes | Parent review/integration only; no force push, branch deletion, tag or release. |
+
+After a fresh `git fetch origin`, the latest `origin/main`
+`0b2ae6be822f4bc9ec8c2cacca37d56476653aac` and exact open PR #6 head
+`707338886626ca70eea916b864ab6e3a2797f8e3` were each confirmed as ancestors of
+this branch with `git merge-base --is-ancestor`. The supplemental changes do not
+replace those commits or change contract source, historical contracts/ABIs,
+existing public deployment configuration, payroll or assistant implementation.
+This branch can be integrated without dropping either upstream history; final
+merge sequencing remains the parent's responsibility. Recheck ancestry if
+either upstream branch moves.
 
 Only the two pre-existing remote branch heads above were present in the remote
 inspection. No unfinished implementation was copied from the dirty main checkout.

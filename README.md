@@ -103,10 +103,14 @@ Base V1, payroll and helper activation remain separately gated.
 
 The standard caller workflows pin DecentHead
 `2b87543db1ff5c44c720e5c7f782386bbd702bc1`, render/pin only `public/` as the
-runnable site (no build), and archive the exact tagged source. Preparation needs
-the missing repository `PINATA_JWT` secret. Announcements remain disabled unless
+runnable site (no build), and archive the exact tagged source. The user has
+configured repository `PINATA_JWT`; the parent verified its name without reading
+its value. Announcements remain disabled unless
 explicitly enabled/configured; no ENS change is authorized by this work.
 See [Supporter release scope, evidence and all issue/PR/branch dispositions](docs/Supporter-Release.md).
+The planned GitHub release is non-prerelease, named **v0.1.0 · sponsored-journey
+preview**; that publication flag does not imply production maturity or activate
+Base V1. [Release notes body](docs/releases/v0.1.0.md).
 
 ## Logical public team jobs
 
