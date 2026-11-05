@@ -104,16 +104,25 @@ modes, signed video/knowledge attestations and expiry refunds. It is not wired
 to the existing V1 transaction desk or production deploy/verify scripts. No NFT
 is minted; metadata/NFT reuse recommendations are in the geographic-gates guide.
 
-## Versioned Supporter edition · preparing
+## Versioned Supporter edition · token 78 / listing 8
 
 The corrective **v0.1.1** Supporter edition is optional development support:
 **1,000 editions at 10 USDC (`10000000`) on Base**, using the existing
 NFT `0xe63EC9f8228720bAAC2fD528C0A6d06B3Dc5439B` and community escrow
 `0x31b07b83e99A9bdF379bf40225b8A80d3804C89d`.
-The About card stays **preparing/unavailable** until a steward-reviewed, verified
-public mint/listing receipt is configured. No token or listing is fabricated.
-Any enabled purchase link uses the existing external DecentHead checkout; this
-app adds no purchase-signing logic.
+Token **78** is minted and escrowed in listing **8**. Independent shared Head
+verification at Base block **53547399** checked the frozen metadata URI, 1,000
+minted editions, at least 12 confirmations, 10 USDC price and active escrow stock
+(1,000 then, not a live promise). The current About links to external DecentHead
+checkout, which rechecks stock/price; this app adds no purchase-signing logic.
+
+- [Support Pilgrimages — 10 USDC](https://thejollylama.github.io/DecentHead/supporter/buy.html?chainId=8453&escrow=0x31b07b83e99A9bdF379bf40225b8A80d3804C89d&listingId=8&priceUSDC=10000000)
+- [Verified public release evidence](https://github.com/TheJollyLaMa/DecentPilgrimages/releases/download/v0.1.1/supporter-minted.json)
+- [Mint receipt](https://basescan.org/tx/0xea8c501ab694cda30b31f9a0336af9ad3d31c1897de4e3f2e1f6af068cb11652)
+
+The existing ENS site is a fixed pre-mint snapshot and still shows its original
+preparing state. Current GitHub Pages has the verified links; repointing ENS
+requires a separately reviewed public build. Frozen NFT metadata/art are unchanged.
 
 Support does **not** prove health, financial functionality, deployment safety,
 returns or future delivery. It is not a reward allocation or contributor payment.
@@ -124,9 +133,9 @@ The standard caller workflows pin DecentHead
 runnable site (no build), and archive the exact tagged source. The user has
 configured repository `PINATA_JWT`; the parent verified its name without reading
 its value. Announcements remain disabled unless
-explicitly enabled/configured; no ENS change is authorized by this work.
+explicitly enabled/configured; minting does not automatically repoint ENS.
 See [Supporter release scope, evidence and all issue/PR/branch dispositions](docs/Supporter-Release.md).
-The planned GitHub release is non-prerelease, named **v0.1.1 · sponsored-journey
+The published GitHub release is non-prerelease, named **v0.1.1 · sponsored-journey
 preview**; that publication flag does not imply production maturity or activate
 Base V1. [Release notes body](docs/releases/v0.1.1.md).
 Prepared **v0.1.0 remains frozen, unminted and superseded**: art review found

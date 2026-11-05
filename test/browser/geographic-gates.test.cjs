@@ -129,7 +129,7 @@ test("map tutorial and About remain usable; denied GPS never enables a visit", a
 });
 
 for (const width of [320, 390, 1024]) {
-    test(`About Supporter edition stays unavailable without a receipt at ${width}px`, async t => {
+    test(`About Supporter verified listing stays external and readable at ${width}px`, async t => {
         const { page, requests, errors } = await fixture(t, { viewport: { width, height: 844 } });
         await page.locator("decent-header app-title button").click();
         const about = page.locator("#about-dialog");
@@ -137,12 +137,13 @@ for (const width of [320, 390, 1024]) {
         await page.locator("#supporter-title").scrollIntoViewIfNeeded();
         assert.match(await page.locator("#supporter-title").innerText(), /v0\.1\.1$/);
         assert.match(await about.innerText(), /1,000 editions, 10 USDC/);
-        assert.match(await page.locator("#supporter-status").innerText(), /No verified mint receipt or listing/);
-        assert.equal(await page.locator("#supporter-preparing").isDisabled(), true);
+        assert.match(await page.locator("#supporter-status").innerText(), /Steward-reviewed mint and listing evidence/);
+        assert.equal(await page.locator("#supporter-preparing").isVisible(), false);
         for (const id of ["supporter-checkout", "supporter-evidence"]) {
-            assert.equal(await page.locator(`#${id}`).isVisible(), false);
-            assert.equal(await page.locator(`#${id}`).getAttribute("href"), null);
+            assert.equal(await page.locator(`#${id}`).isVisible(), true);
+            assert.ok(await page.locator(`#${id}`).getAttribute("href"));
         }
+        assert.equal(new URL(await page.locator("#supporter-checkout").getAttribute("href")).searchParams.get("listingId"), "8");
 
         assert.match(await about.innerText(), /not a travel reward or proof of health, financial functionality/);
         const dimensions = await about.evaluate(node => ({ client: node.clientWidth, scroll: node.scrollWidth }));
@@ -182,7 +183,7 @@ for (const width of [1440, 390, 320]) {
     });
 }
 
-test("legacy Pages root redirects into public app preserving query/hash and shows pending About", async t => {
+test("legacy Pages root redirects into public app preserving query/hash and shows verified About", async t => {
     const { createStaticServer } = await import("../../assistant/static-server.mjs");
     const { createServer } = require("node:http");
     const app = createStaticServer();
@@ -220,10 +221,10 @@ test("legacy Pages root redirects into public app preserving query/hash and show
     await page.locator("decent-header app-title button").click();
     await page.locator("#about-dialog").waitFor({ state: "visible" });
     assert.match(await page.locator("#supporter-title").innerText(), /v0\.1\.1$/);
-    assert.match(await page.locator("#supporter-status").innerText(), /Preparing.*No verified mint receipt/);
-    assert.equal(await page.locator("#supporter-preparing").isDisabled(), true);
-    assert.equal(await page.locator("#supporter-checkout").getAttribute("href"), null);
-    assert.equal(await page.locator("#supporter-checkout").isVisible(), false);
+    assert.match(await page.locator("#supporter-status").innerText(), /Steward-reviewed mint and listing evidence/);
+    assert.equal(await page.locator("#supporter-preparing").isVisible(), false);
+    assert.equal(new URL(await page.locator("#supporter-checkout").getAttribute("href")).searchParams.get("listingId"), "8");
+    assert.equal(await page.locator("#supporter-checkout").isVisible(), true);
     assert.deepEqual(errors, []);
     assert.deepEqual(external, []);
 });

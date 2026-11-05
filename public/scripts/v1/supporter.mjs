@@ -5,7 +5,15 @@ export const supporterEdition = Object.freeze({
   priceUSDC: '10000000',
   nftContract: '0xe63EC9f8228720bAAC2fD528C0A6d06B3Dc5439B',
   escrow: '0x31b07b83e99A9bdF379bf40225b8A80d3804C89d',
-  verification: null,
+  verification: Object.freeze({
+    version: 'v0.1.1', chainId: 8453, supply: '1000', priceUSDC: '10000000',
+    nftContract: '0xe63EC9f8228720bAAC2fD528C0A6d06B3Dc5439B',
+    escrow: '0x31b07b83e99A9bdF379bf40225b8A80d3804C89d',
+    tokenId: '78', listingId: '8', confirmations: 12, verifiedBlock: 53547399,
+    mintTxHash: '0xea8c501ab694cda30b31f9a0336af9ad3d31c1897de4e3f2e1f6af068cb11652',
+    evidenceUrl: 'https://github.com/TheJollyLaMa/DecentPilgrimages/releases/download/v0.1.1/supporter-minted.json',
+    purchaseUrl: 'https://thejollylama.github.io/DecentHead/supporter/buy.html?chainId=8453&escrow=0x31b07b83e99A9bdF379bf40225b8A80d3804C89d&listingId=8&priceUSDC=10000000',
+  }),
 });
 
 // Only a steward-reviewed, public verifier result may populate verification.

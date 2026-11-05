@@ -15,16 +15,26 @@ const fixture = () => ({
   },
 });
 
-test('default edition stays unavailable without a receipt and cannot construct a listing', async () => {
+test('absent receipt stays unavailable and cannot construct a listing', async () => {
   assert.equal(supporterEdition.version, 'v0.1.1');
-  assert.equal(supporterLinks(), null);
-  mountSupporterCard({ getElementById() { assert.fail('pending state must not mutate purchase links'); } });
+  const pending = { ...supporterEdition, verification: null };
+  assert.equal(supporterLinks(pending), null);
+  mountSupporterCard({ getElementById() { assert.fail('pending state must not mutate purchase links'); } }, pending);
   const html = await read('public/index.html');
   assert.match(html, /id="supporter-preparing" disabled/);
   assert.match(html, /id="supporter-checkout" hidden(?![^>]*href)/);
   assert.match(html, /id="supporter-evidence" hidden(?![^>]*href)/);
   assert.match(html, /proof of health, financial functionality/);
   assert.match(html, /id="supporter-title">Support this journey · v0\.1\.1</);
+});
+
+test('default edition binds verified token 78/listing 8 and versioned public evidence', () => {
+  const receipt = supporterEdition.verification;
+  assert.equal(receipt.tokenId, '78');
+  assert.equal(receipt.listingId, '8');
+  assert.equal(receipt.verifiedBlock, 53547399);
+  assert.equal(supporterLinks().purchaseUrl, receipt.purchaseUrl);
+  assert.ok(supporterLinks().evidenceUrl.endsWith('/v0.1.1/supporter-minted.json'));
 });
 
 test('reviewed receipt can link only to pinned external checkout and versioned public evidence', () => {
